@@ -1,0 +1,1476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Riya Tours and Travels — Logbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<style>
+  :root{
+    --ink:#2E4057;
+    --ink-soft:#6B7A8F;
+    --paper:#FFFFFF;
+    --paper-dim:#F4F7FA;
+    --paper-card:#FFFFFF;
+    --line:#E1E7ED;
+    --line-strong:#C4D0DC;
+    --amber:#2F8F7A;
+    --amber-deep:#23705F;
+    --amber-pale:#E3F3EF;
+    --rust:#D1685A;
+    --rust-pale:#FBEAE7;
+    --green:#4C9A6A;
+    --green-pale:#E7F5EC;
+    --shadow:0 1px 2px rgba(46,64,87,0.06);
+    --radius:10px;
+    --font-display:'Space Grotesk', sans-serif;
+    --font-mono:'JetBrains Mono', monospace;
+  }
+  [data-mode="dark"]{
+    --ink:#2E4057;
+    --ink-soft:#6B7A8F;
+    --paper:#FFFFFF;
+    --paper-dim:#F4F7FA;
+    --paper-card:#FFFFFF;
+    --line:#E1E7ED;
+    --line-strong:#C4D0DC;
+    --amber:#2F8F7A;
+    --amber-deep:#23705F;
+    --amber-pale:#E3F3EF;
+    --rust:#D1685A;
+    --rust-pale:#FBEAE7;
+    --green:#4C9A6A;
+    --green-pale:#E7F5EC;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--font-display);
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+  .app{max-width:760px;margin:0 auto;padding:0 16px 80px;}
+
+  /* ===== Company bar ===== */
+  .company-bar{
+    text-align:center;padding:14px 10px 12px;border-bottom:1.5px solid var(--line);margin-bottom:2px;
+  }
+  .company-name{
+    font-size:18px;font-weight:700;letter-spacing:0.02em;color:var(--amber-deep);
+  }
+  .company-meta{
+    font-size:12px;color:var(--ink-soft);margin-top:3px;letter-spacing:0.02em;
+  }
+
+  /* ===== Header ===== */
+  .topbar{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 0 14px;border-bottom:1.5px solid var(--line);margin-bottom:4px;
+  }
+  .brand{display:flex;align-items:center;gap:10px;}
+  .brand-mark{
+    width:34px;height:34px;border-radius:6px;background:var(--amber);
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+  .brand-mark svg{width:20px;height:20px;}
+  .brand-text h1{font-size:17px;margin:0;font-weight:700;letter-spacing:-0.01em;}
+  .brand-text p{font-size:11px;margin:0;color:var(--ink-soft);letter-spacing:0.04em;text-transform:uppercase;}
+  .top-actions{display:flex;gap:8px;align-items:center;}
+  .icon-btn{
+    width:36px;height:36px;border-radius:8px;border:1.5px solid var(--line-strong);
+    background:var(--paper-card);display:flex;align-items:center;justify-content:center;
+    cursor:pointer;color:var(--ink);
+  }
+  .icon-btn:hover{border-color:var(--amber-deep);}
+  .icon-btn svg{width:17px;height:17px;}
+
+  /* ===== Vehicle plate ===== */
+  .plate-row{display:flex;align-items:center;gap:10px;margin:14px 0 18px;}
+  .plate{
+    font-family:var(--font-mono);font-weight:700;font-size:15px;letter-spacing:0.06em;
+    background:var(--amber-pale);color:var(--amber-deep);padding:8px 14px;border-radius:6px;
+    border:1.5px solid var(--amber);
+    display:flex;align-items:center;gap:8px;
+  }
+  .plate input{
+    background:transparent;border:none;color:inherit;font-family:inherit;font-weight:inherit;
+    font-size:inherit;letter-spacing:inherit;width:120px;outline:none;
+  }
+  .odo-pill{
+    font-family:var(--font-mono);font-size:12px;color:var(--ink-soft);
+    border:1.5px dashed var(--line-strong);padding:7px 12px;border-radius:6px;
+  }
+  .odo-pill b{color:var(--ink);font-weight:700;}
+
+  /* ===== Tabs ===== */
+  .tabs{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:22px;
+    position:sticky;top:0;background:var(--paper);padding:10px 0;z-index:10;
+
+  }
+  .tab{
+    font-family:var(--font-display);font-size:12.5px;font-weight:500;
+    padding:10px 4px;border-radius:8px;border:1.5px solid var(--line);
+    background:var(--paper-card);color:var(--ink-soft);cursor:pointer;text-align:center;
+    transition:border-color .12s;
+  }
+  .tab span{display:block;font-size:10px;text-transform:uppercase;letter-spacing:0.05em;opacity:0.7;margin-bottom:2px;}
+  .tab.active{border-color:var(--ink);color:var(--ink);background:var(--amber-pale);font-weight:700;}
+
+  .page{display:none;}
+  .page.active{display:block;animation:fadein .15s ease;}
+  @keyframes fadein{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:none;}}
+
+  /* ===== Section heading ===== */
+  .section-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px;}
+  .section-head h2{font-size:15px;margin:0;font-weight:700;}
+  .section-head .hint{font-size:12px;color:var(--ink-soft);}
+
+  /* ===== Form card ===== */
+  .card{
+    background:var(--paper-card);border:1.5px solid var(--line);border-radius:var(--radius);
+    padding:18px;margin-bottom:16px;box-shadow:var(--shadow);
+  }
+  .card-title{
+    font-size:11px;text-transform:uppercase;letter-spacing:0.07em;color:var(--ink-soft);
+    font-weight:700;margin:0 0 14px;display:flex;align-items:center;gap:6px;
+  }
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .field{margin-bottom:12px;}
+  .field label{
+    display:block;font-size:12px;color:var(--ink-soft);margin-bottom:5px;font-weight:500;
+  }
+  .field input,.field select,.field textarea{
+    width:100%;padding:10px 11px;border:1.5px solid var(--line-strong);border-radius:7px;
+    background:var(--paper);color:var(--ink);font-family:var(--font-display);font-size:14px;
+    outline:none;
+  }
+  .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--amber-deep);}
+  .field input[type="number"],.field .mono-input{font-family:var(--font-mono);}
+  .field textarea{resize:vertical;min-height:60px;}
+
+  .km-readout{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    background:var(--paper-dim);color:var(--ink);border-radius:8px;padding:12px 16px;margin:4px 0 14px;
+    border:1.5px solid var(--line);
+  }
+  .km-readout .seg{text-align:center;flex:1;}
+  .km-readout .seg .num{font-family:var(--font-mono);font-size:18px;font-weight:700;}
+  .km-readout .seg .lbl{font-size:9.5px;text-transform:uppercase;letter-spacing:0.06em;color:var(--ink-soft);margin-top:2px;}
+  .km-readout .op{font-size:16px;color:var(--ink-soft);font-family:var(--font-mono);}
+  .km-readout .seg.result .num{color:var(--amber-deep);}
+
+  .upload-zone{
+    border:1.5px dashed var(--line-strong);border-radius:8px;padding:16px;text-align:center;
+    cursor:pointer;background:var(--paper-dim);transition:border-color .12s;
+  }
+  .upload-zone:hover{border-color:var(--amber-deep);}
+  .upload-zone svg{width:22px;height:22px;color:var(--ink-soft);margin-bottom:6px;}
+  .upload-zone p{margin:0;font-size:12.5px;color:var(--ink-soft);}
+  .upload-zone input{display:none;}
+  .doc-thumbs{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+  .doc-thumb{
+    width:56px;height:56px;border-radius:7px;border:1.5px solid var(--line-strong);
+    background:var(--paper);display:flex;align-items:center;justify-content:center;
+    position:relative;overflow:hidden;cursor:pointer;
+  }
+  .doc-thumb img{width:100%;height:100%;object-fit:cover;}
+  .doc-thumb .pdf-icon{color:var(--rust);font-size:10px;font-weight:700;font-family:var(--font-mono);}
+  .doc-thumb .remove{
+    position:absolute;top:1px;right:1px;width:16px;height:16px;background:var(--rust);
+    color:#FFFFFF;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    font-size:10px;line-height:1;
+  }
+
+  .btn{
+    font-family:var(--font-display);font-weight:700;font-size:13.5px;
+    padding:11px 18px;border-radius:8px;border:1.5px solid var(--amber);
+    background:var(--amber);color:#FFFFFF;cursor:pointer;display:inline-flex;
+    align-items:center;gap:7px;
+  }
+  .btn:hover{opacity:0.88;}
+  .btn.ghost{background:transparent;color:var(--ink);border-color:var(--line-strong);}
+  .btn.full{width:100%;justify-content:center;}
+  .btn svg{width:15px;height:15px;}
+  .btn.small{padding:7px 12px;font-size:12px;}
+  .btn.danger{background:var(--rust);border-color:var(--rust);color:#fff;}
+
+  /* ===== Entry rows (list) ===== */
+  .entry-list{display:flex;flex-direction:column;gap:8px;}
+  .entry-row{
+    background:var(--paper-card);border:1.5px solid var(--line);border-radius:8px;
+    padding:12px 14px;display:flex;align-items:center;gap:12px;
+  }
+  .entry-row .date-chip{
+    font-family:var(--font-mono);font-size:11px;font-weight:700;color:var(--ink-soft);
+    background:var(--paper-dim);border-radius:6px;padding:6px 8px;text-align:center;min-width:54px;
+  }
+  .entry-row .main{flex:1;min-width:0;}
+  .entry-row .main .title{font-size:13.5px;font-weight:500;margin:0 0 2px;}
+  .entry-row .main .sub{font-size:11.5px;color:var(--ink-soft);margin:0;}
+  .entry-row .amt{font-family:var(--font-mono);font-weight:700;font-size:14px;white-space:nowrap;}
+  .entry-row .amt.income{color:var(--green);}
+  .entry-row .amt.expense{color:var(--rust);}
+  .entry-row .row-actions{display:flex;gap:4px;}
+  .entry-row .row-actions button{
+    width:28px;height:28px;border-radius:6px;border:1px solid var(--line);background:var(--paper);
+    display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--ink-soft);
+  }
+  .entry-row .row-actions button:hover{color:var(--rust);border-color:var(--rust);}
+  .entry-row .thumb-mini{
+    width:30px;height:30px;border-radius:5px;border:1px solid var(--line-strong);overflow:hidden;flex-shrink:0;
+  }
+  .entry-row .thumb-mini img{width:100%;height:100%;object-fit:cover;}
+
+  .empty-state{
+    text-align:center;padding:36px 16px;color:var(--ink-soft);
+  }
+  .empty-state svg{width:34px;height:34px;margin-bottom:10px;opacity:0.5;}
+  .empty-state p{margin:0;font-size:13px;}
+
+  /* ===== Stat cards (overview) ===== */
+  .month-switch{
+    display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;
+    background:var(--paper-card);border:1.5px solid var(--line);border-radius:8px;padding:10px 14px;
+  }
+  .month-switch button{
+    background:none;border:none;cursor:pointer;color:var(--ink);display:flex;align-items:center;
+    padding:4px;
+  }
+  .month-switch button svg{width:18px;height:18px;}
+  .month-switch .label{font-weight:700;font-size:15px;}
+
+  .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+  .stat-grid.wide{grid-template-columns:repeat(2,1fr);}
+  .stat-card{
+    background:var(--paper-card);border:1.5px solid var(--line);border-radius:var(--radius);
+    padding:14px 16px;
+  }
+  .stat-card .lbl{font-size:11px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:0.05em;margin:0 0 6px;font-weight:600;}
+  .stat-card .val{font-family:var(--font-mono);font-size:21px;font-weight:700;margin:0;}
+  .stat-card.income .val{color:var(--green);}
+  .stat-card.expense .val{color:var(--rust);}
+  .stat-card.net .val{color:var(--amber-deep);}
+  .stat-card .sub{font-size:11px;color:var(--ink-soft);margin:4px 0 0;}
+
+  .breakdown-bar{height:8px;border-radius:4px;background:var(--paper-dim);overflow:hidden;display:flex;margin-top:8px;}
+  .breakdown-bar .seg{height:100%;}
+
+  .legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;font-size:12px;color:var(--ink-soft);}
+  .legend .dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:5px;}
+
+  /* ===== Modal ===== */
+  .modal-overlay{
+    display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:100;
+    align-items:flex-end;justify-content:center;
+  }
+  .modal-overlay.open{display:flex;}
+  .modal{
+    background:var(--paper);width:100%;max-width:760px;border-radius:16px 16px 0 0;
+    padding:20px 16px calc(20px + env(safe-area-inset-bottom));max-height:88vh;overflow-y:auto;
+    animation:slideup .18s ease;
+  }
+  @keyframes slideup{from{transform:translateY(20px);opacity:0;}to{transform:none;opacity:1;}}
+  .modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+  .modal-head h3{margin:0;font-size:16px;font-weight:700;}
+  .modal-head button{background:none;border:none;cursor:pointer;color:var(--ink-soft);padding:4px;}
+  .modal-head button svg{width:20px;height:20px;}
+  .doc-viewer-img{width:100%;border-radius:8px;border:1px solid var(--line);}
+
+  .toast{
+    position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+    background:var(--amber-deep);color:#FFFFFF;padding:10px 18px;border-radius:8px;
+    font-size:13px;font-weight:500;z-index:200;opacity:0;pointer-events:none;
+    transition:opacity .2s, transform .2s;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(-6px);}
+
+  .save-indicator{font-size:11px;color:var(--ink-soft);display:flex;align-items:center;gap:5px;}
+  .save-indicator .dot{width:6px;height:6px;border-radius:50%;background:var(--green);}
+
+  /* ===== Sign-in gate ===== */
+  .signin-gate{
+    min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:40px 24px;text-align:center;background:var(--paper);
+  }
+  .signin-gate .gate-mark{
+    width:56px;height:56px;border-radius:12px;background:var(--amber);
+    display:flex;align-items:center;justify-content:center;margin-bottom:20px;
+  }
+  .signin-gate .gate-mark svg{width:30px;height:30px;}
+  .signin-gate h1{font-size:19px;font-weight:700;margin:0 0 4px;color:var(--amber-deep);}
+  .signin-gate .gate-sub{font-size:12.5px;color:var(--ink-soft);margin:0 0 28px;}
+  .signin-gate p.pitch{font-size:13.5px;color:var(--ink-soft);max-width:320px;margin:0 0 24px;line-height:1.6;}
+  #gsiButtonContainer{margin-bottom:14px;}
+  .signin-gate .gate-note{font-size:11.5px;color:var(--ink-soft);max-width:300px;margin-top:18px;line-height:1.6;}
+  .signin-gate .gate-note a{color:var(--amber-deep);}
+
+  /* ===== Account badge ===== */
+  .account-badge{
+    display:flex;align-items:center;gap:7px;font-size:12px;color:var(--ink-soft);
+    border:1.5px solid var(--line-strong);border-radius:20px;padding:5px 12px 5px 5px;cursor:pointer;
+  }
+  .account-badge img{width:22px;height:22px;border-radius:50%;display:none;}
+  .account-badge:hover{border-color:var(--amber-deep);}
+
+  .sync-status{font-size:11px;color:var(--ink-soft);display:flex;align-items:center;gap:5px;}
+  .sync-status .dot{width:6px;height:6px;border-radius:50%;background:var(--green);}
+  .sync-status .dot.syncing{background:var(--amber);}
+  .sync-status .dot.error{background:var(--rust);}
+
+  @media (max-width:420px){
+    .grid2{grid-template-columns:1fr;}
+    .tab{font-size:11px;padding:9px 2px;}
+    .stat-card .val{font-size:18px;}
+  }
+</style>
+</head>
+<body data-mode="light">
+
+<div class="signin-gate" id="signinGate">
+  <div class="gate-mark">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2"><path d="M3 13h2l1.5-5h9L17 13h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 13v3a1 1 0 0 0 1 1h1" stroke-linecap="round" stroke-linejoin="round"/><circle cx="7.5" cy="17.5" r="1.5"/><circle cx="16.5" cy="17.5" r="1.5"/><path d="M9 17.5h6" stroke-linecap="round"/></svg>
+  </div>
+  <h1>RIYA TOURS AND TRAVELS</h1>
+  <p class="pitch">Sign in with Google to open your logbook. Your daily entries, bills, and photos are saved straight to your own Google Drive, so they're there on any device you sign in from.</p>
+  <div id="gsiButtonContainer"></div>
+  <p class="gate-note" id="gateNote">Loading sign-in…</p>
+</div>
+
+<div class="app" id="mainApp" style="display:none;">
+
+  <div class="company-bar">
+    <div class="company-name">RIYA TOURS AND TRAVELS</div>
+  </div>
+
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2"><path d="M3 13h2l1.5-5h9L17 13h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 13v3a1 1 0 0 0 1 1h1" stroke-linecap="round" stroke-linejoin="round"/><circle cx="7.5" cy="17.5" r="1.5"/><circle cx="16.5" cy="17.5" r="1.5"/><path d="M9 17.5h6" stroke-linecap="round"/></svg>
+      </div>
+      <div class="brand-text">
+        <h1>Logbook</h1>
+        <p>Transport diary</p>
+      </div>
+    </div>
+    <div class="top-actions">
+      <div class="sync-status" id="saveIndicator"><span class="dot"></span><span>Synced</span></div>
+      <div class="account-badge" id="accountBadge" title="Sign out">
+        <img id="accountAvatar" src="" alt="">
+        <span id="accountLabel">Account</span>
+      </div>
+      <button class="icon-btn" id="exportBtn" title="Export backup">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15V3m0 12-4-4m4 4 4-4M4 17v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="plate-row">
+    <div class="plate">
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 13h2l1.5-5h9L17 13h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1" stroke-linecap="round" stroke-linejoin="round"/><circle cx="7.5" cy="17.5" r="1.5"/><circle cx="16.5" cy="17.5" r="1.5"/></svg>
+      <input type="text" id="vehicleNumber" placeholder="VEHICLE NO." value="">
+    </div>
+    <div class="odo-pill">Current odometer: <b id="currentOdoDisplay">—</b> km</div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" data-page="diary"><span>Page 1</span>Daily diary</div>
+    <div class="tab" data-page="fuel"><span>Page 2</span>Fuel log</div>
+    <div class="tab" data-page="parts"><span>Page 3</span>Parts</div>
+    <div class="tab" data-page="overview"><span>Page 4</span>Overview</div>
+  </div>
+
+  <!-- ===================== PAGE 1: DAILY DIARY ===================== -->
+  <div class="page active" id="page-diary">
+    <div class="section-head">
+      <h2>Today's entry</h2>
+      <span class="hint">One row per day, per trip</span>
+    </div>
+
+    <div class="card">
+      <p class="card-title">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" stroke-linecap="round"/><path d="M3 9h18M8 2v4M16 2v4" stroke-linecap="round"/></svg>
+        New diary entry
+      </p>
+      <div class="grid2">
+        <div class="field">
+          <label>Date</label>
+          <input type="date" id="diaryDate">
+        </div>
+        <div class="field">
+          <label>Where the vehicle went</label>
+          <input type="text" id="diaryRoute" placeholder="e.g. Asansol to Durgapur">
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="field">
+          <label>Total collection (₹)</label>
+          <input type="number" inputmode="decimal" id="diaryCollection" placeholder="0">
+        </div>
+        <div class="field">
+          <label>Today's last km reading</label>
+          <input type="number" inputmode="numeric" id="diaryKmToday" placeholder="0">
+        </div>
+      </div>
+
+      <div class="km-readout">
+        <div class="seg">
+          <div class="num" id="kmPrevDisplay">—</div>
+          <div class="lbl">Previous reading</div>
+        </div>
+        <div class="op">→</div>
+        <div class="seg">
+          <div class="num" id="kmTodayDisplay">—</div>
+          <div class="lbl">Today's reading</div>
+        </div>
+        <div class="op">=</div>
+        <div class="seg result">
+          <div class="num" id="kmRunDisplay">—</div>
+          <div class="lbl">Km run today</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Documents for this trip (photo or PDF)</label>
+        <div class="upload-zone" id="diaryUploadZone">
+          <input type="file" id="diaryFileInput" accept="image/*,application/pdf" multiple>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 16V4m0 0-4 4m4-4 4 4" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <p>Tap to add a photo or PDF</p>
+        </div>
+        <div class="doc-thumbs" id="diaryDocThumbs"></div>
+      </div>
+
+      <button class="btn full" id="saveDiaryBtn" style="margin-top:4px;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Save entry
+      </button>
+    </div>
+
+    <div class="section-head" style="margin-top:24px;">
+      <h2>Recent entries</h2>
+    </div>
+    <div class="entry-list" id="diaryList"></div>
+  </div>
+
+  <!-- ===================== PAGE 2: FUEL LOG ===================== -->
+  <div class="page" id="page-fuel">
+    <div class="section-head">
+      <h2>Fuel / oil expenses</h2>
+      <span class="hint">Every fill-up, every bill</span>
+    </div>
+
+    <div class="card">
+      <p class="card-title">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 22h12M5 22V8l5-4 5 4v14M9 12h2M17 8l2 2v8a1.5 1.5 0 0 1-3 0v-3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        New fuel entry
+      </p>
+      <div class="grid2">
+        <div class="field">
+          <label>Date</label>
+          <input type="date" id="fuelDate">
+        </div>
+        <div class="field">
+          <label>Amount (₹)</label>
+          <input type="number" inputmode="decimal" id="fuelAmount" placeholder="0">
+        </div>
+      </div>
+      <div class="field">
+        <label>Remarks</label>
+        <input type="text" id="fuelRemarks" placeholder="e.g. Diesel, full tank — Asansol pump">
+      </div>
+      <div class="field">
+        <label>Bill (photo or PDF)</label>
+        <div class="upload-zone" id="fuelUploadZone">
+          <input type="file" id="fuelFileInput" accept="image/*,application/pdf" multiple>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 16V4m0 0-4 4m4-4 4 4" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <p>Tap to add a photo or PDF</p>
+        </div>
+        <div class="doc-thumbs" id="fuelDocThumbs"></div>
+      </div>
+      <button class="btn full" id="saveFuelBtn" style="margin-top:4px;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Save entry
+      </button>
+    </div>
+
+    <div class="section-head" style="margin-top:24px;">
+      <h2>Recent fuel entries</h2>
+    </div>
+    <div class="entry-list" id="fuelList"></div>
+  </div>
+
+  <!-- ===================== PAGE 3: PARTS / MAINTENANCE ===================== -->
+  <div class="page" id="page-parts">
+    <div class="section-head">
+      <h2>Parts and maintenance</h2>
+      <span class="hint">Track wear parts and service bills</span>
+    </div>
+
+    <div class="card">
+      <p class="card-title">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94L9.7 19.3a2.83 2.83 0 0 1-4-4L11.4 9.5a6 6 0 0 1 7.94-7.94L15.6 5.3a1 1 0 0 0 0 1.4l-.9-.4Z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        New part change
+      </p>
+      <div class="grid2">
+        <div class="field">
+          <label>Date</label>
+          <input type="date" id="partDate">
+        </div>
+        <div class="field">
+          <label>Km reading when changed</label>
+          <input type="number" inputmode="numeric" id="partKm" placeholder="0">
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="field">
+          <label>Part name</label>
+          <input type="text" id="partName" placeholder="e.g. Clutch plate, engine oil filter">
+        </div>
+        <div class="field">
+          <label>Amount (₹)</label>
+          <input type="number" inputmode="decimal" id="partAmount" placeholder="0">
+        </div>
+      </div>
+      <div class="field">
+        <label>Bill (photo or PDF)</label>
+        <div class="upload-zone" id="partUploadZone">
+          <input type="file" id="partFileInput" accept="image/*,application/pdf" multiple>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 16V4m0 0-4 4m4-4 4 4" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <p>Tap to add a photo or PDF</p>
+        </div>
+        <div class="doc-thumbs" id="partDocThumbs"></div>
+      </div>
+      <button class="btn full" id="savePartBtn" style="margin-top:4px;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Save entry
+      </button>
+    </div>
+
+    <div class="section-head" style="margin-top:24px;">
+      <h2>Recent part changes</h2>
+    </div>
+    <div class="entry-list" id="partList"></div>
+  </div>
+
+  <!-- ===================== PAGE 4: OVERVIEW ===================== -->
+  <div class="page" id="page-overview">
+    <div class="section-head">
+      <h2>Monthly overview</h2>
+      <span class="hint">All pages, one view</span>
+    </div>
+
+    <div class="month-switch">
+      <button id="prevMonthBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <span class="label" id="monthLabel">—</span>
+      <button id="nextMonthBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat-card income">
+        <p class="lbl">Total collection</p>
+        <p class="val" id="statCollection">₹0</p>
+      </div>
+      <div class="stat-card expense">
+        <p class="lbl">Total expenses</p>
+        <p class="val" id="statExpense">₹0</p>
+      </div>
+    </div>
+    <div class="stat-grid">
+      <div class="stat-card net">
+        <p class="lbl">Net for the month</p>
+        <p class="val" id="statNet">₹0</p>
+      </div>
+      <div class="stat-card">
+        <p class="lbl">Km run this month</p>
+        <p class="val" id="statKm">0</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <p class="card-title">Expense breakdown</p>
+      <div class="breakdown-bar" id="breakdownBar"></div>
+      <div class="legend" id="breakdownLegend"></div>
+    </div>
+
+    <div class="card">
+      <p class="card-title">Per-day average</p>
+      <div class="grid2" style="margin-bottom:0;">
+        <div class="field" style="margin-bottom:0;">
+          <label>Avg collection / trip</label>
+          <input type="text" disabled id="avgCollection" style="font-family:var(--font-mono);">
+        </div>
+        <div class="field" style="margin-bottom:0;">
+          <label>Avg km / trip</label>
+          <input type="text" disabled id="avgKm" style="font-family:var(--font-mono);">
+        </div>
+      </div>
+    </div>
+
+    <div class="section-head" style="margin-top:8px;">
+      <h2>Days logged this month</h2>
+    </div>
+    <div class="entry-list" id="overviewDiaryList"></div>
+  </div>
+
+</div>
+
+<!-- Document viewer modal -->
+<div class="modal-overlay" id="docModal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>Document</h3>
+      <button id="closeDocModal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    </div>
+    <div id="docModalBody"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* =====================================================================
+     CONFIG — fill in your own Google Cloud OAuth Client ID here
+     ===================================================================== */
+  var GOOGLE_CLIENT_ID = "433862928796-rjde3gd5ghu5vqhbl0d20amcantmauat.apps.googleusercontent.com";
+  var DRIVE_FILE_NAME = "riya-tours-logbook-data.json";
+  var DRIVE_SCOPE = "https://www.googleapis.com/auth/drive.file";
+
+  /* ---------- Storage helpers ---------- */
+  var STORE_KEY = "logbook_v1_data";
+  var saveTimer = null;
+  var driveFileId = null;
+  var accessToken = null;
+  var tokenClient = null;
+  var driveReady = false;
+  var pendingDriveSave = false;
+
+  function loadData(){
+    try{
+      var raw = localStorage.getItem(STORE_KEY);
+      if(raw) return JSON.parse(raw);
+    }catch(e){ console.error("load failed", e); }
+    return {
+      vehicleNumber:"",
+      darkMode:false,
+      diary:[],   // {id,date,route,collection,kmPrev,kmToday,kmRun,docs:[{name,type,data}]}
+      fuel:[],    // {id,date,amount,remarks,docs:[]}
+      parts:[]    // {id,date,km,name,amount,docs:[]}
+    };
+  }
+
+  var data = loadData();
+
+  function persist(){
+    showSaveIndicator("saving");
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(function(){
+      try{
+        localStorage.setItem(STORE_KEY, JSON.stringify(data));
+      }catch(e){
+        showToast("Local storage is full — try removing some large photos.");
+      }
+      saveToDrive();
+    }, 600);
+  }
+
+  function showSaveIndicator(state){
+    var el = document.getElementById("saveIndicator");
+    if(state === "saving"){
+      el.innerHTML = '<span class="dot syncing"></span><span>Syncing to Drive…</span>';
+    } else if(state === "saved"){
+      el.innerHTML = '<span class="dot"></span><span>Synced &middot; ' + nowISTTimeString() + '</span>';
+    } else if(state === "offline"){
+      el.innerHTML = '<span class="dot syncing"></span><span>Saved on this device &middot; not signed in</span>';
+    } else {
+      el.innerHTML = '<span class="dot error"></span><span>Sync failed — saved on device only</span>';
+    }
+  }
+
+  /* =====================================================================
+     GOOGLE SIGN-IN
+     ===================================================================== */
+  function initSignIn(){
+    if(GOOGLE_CLIENT_ID.indexOf("YOUR_CLIENT_ID") === 0){
+      document.getElementById("gateNote").textContent =
+        "Sign-in isn't configured yet — add your Google Client ID in the app file.";
+      return;
+    }
+    if(typeof google === "undefined" || !google.accounts){
+      setTimeout(initSignIn, 300);
+      return;
+    }
+    document.getElementById("gateNote").innerHTML =
+      "Your data is stored only in your own Google Drive. Riya Tours and Travels' logbook never sees your password.";
+
+    google.accounts.id.initialize({
+      client_id: GOOGLE_CLIENT_ID,
+      callback: function(){} // not used; we use the OAuth token flow below instead
+    });
+    google.accounts.id.renderButton(
+      document.getElementById("gsiButtonContainer"),
+      { theme:"outline", size:"large", text:"signin_with", shape:"pill" }
+    );
+
+    tokenClient = google.accounts.oauth2.initTokenClient({
+      client_id: GOOGLE_CLIENT_ID,
+      scope: DRIVE_SCOPE + " https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email",
+      callback: function(resp){
+        if(resp && resp.access_token){
+          accessToken = resp.access_token;
+          sessionStorage.setItem("gbook_token", accessToken);
+          onSignedIn();
+        }
+      }
+    });
+
+    // Replace the rendered GSI button with our own "continue" button that
+    // triggers the OAuth popup (GSI's One Tap button alone doesn't grant Drive scope).
+    var container = document.getElementById("gsiButtonContainer");
+    container.innerHTML = "";
+    var btn = document.createElement("button");
+    btn.className = "btn";
+    btn.style.fontSize = "14px";
+    btn.innerHTML = '<svg viewBox="0 0 24 24" width="16" height="16"><path fill="#fff" d="M21.8 12.2c0-.7-.1-1.4-.2-2H12v3.9h5.5c-.2 1.2-1 2.3-2.1 3v2.6h3.4c2-1.8 3-4.5 3-7.5z"/><path fill="#fff" d="M12 22c2.7 0 5-1 6.7-2.4l-3.4-2.6c-.9.6-2 1-3.3 1-2.6 0-4.8-1.7-5.6-4.1H3v2.7C4.7 19.9 8.1 22 12 22z"/><path fill="#fff" d="M6.4 13.9c-.2-.6-.3-1.2-.3-1.9s.1-1.3.3-1.9V7.4H3C2.4 8.7 2 10.3 2 12s.4 3.3 1 4.6l3.4-2.7z"/><path fill="#fff" d="M12 6.1c1.5 0 2.8.5 3.8 1.4l3-3C17 2.7 14.7 2 12 2 8.1 2 4.7 4.1 3 7.4l3.4 2.7c.8-2.4 3-4 5.6-4z"/></svg> Continue with Google';
+    btn.addEventListener("click", function(){
+      tokenClient.requestAccessToken({ prompt: accessToken ? "" : "consent" });
+    });
+    container.appendChild(btn);
+
+    // Try silent restore if we have a token from this session
+    var saved = sessionStorage.getItem("gbook_token");
+    if(saved){
+      accessToken = saved;
+      onSignedIn();
+    }
+  }
+
+  function onSignedIn(){
+    fetchProfile();
+    findOrCreateDriveFile(function(ok){
+      if(ok){
+        loadFromDrive(function(){
+          driveReady = true;
+          showApp();
+          showSaveIndicator("saved");
+        });
+      } else {
+        // token likely invalid/expired
+        signOut();
+        showToast("Sign-in expired. Please continue with Google again.");
+      }
+    });
+  }
+
+  function fetchProfile(){
+    fetch("https://www.googleapis.com/oauth2/v3/userinfo", {
+      headers:{ "Authorization":"Bearer " + accessToken }
+    }).then(function(r){ return r.json(); }).then(function(profile){
+      var label = document.getElementById("accountLabel");
+      var avatar = document.getElementById("accountAvatar");
+      if(profile.email) label.textContent = profile.email.split("@")[0];
+      if(profile.picture){ avatar.src = profile.picture; avatar.style.display = "block"; }
+      else { avatar.style.display = "none"; }
+    }).catch(function(){});
+  }
+
+  function showApp(){
+    document.getElementById("signinGate").style.display = "none";
+    document.getElementById("mainApp").style.display = "block";
+  }
+
+  function signOut(){
+    accessToken = null;
+    driveFileId = null;
+    driveReady = false;
+    sessionStorage.removeItem("gbook_token");
+    document.getElementById("mainApp").style.display = "none";
+    document.getElementById("signinGate").style.display = "flex";
+  }
+
+  document.getElementById("accountBadge").addEventListener("click", function(){
+    if(confirm("Sign out of Google? Your data stays safely in your Drive — you can sign in again anytime.")){
+      signOut();
+    }
+  });
+
+  /* =====================================================================
+     GOOGLE DRIVE READ/WRITE
+     Uses the drive.file scope: the app can only see files it created itself,
+     stored in a single JSON file in the user's Drive (not a visible folder
+     dump — it shows up in Drive under "logbook" file name).
+     ===================================================================== */
+  function driveHeaders(extra){
+    var h = { "Authorization":"Bearer " + accessToken };
+    if(extra) for(var k in extra) h[k] = extra[k];
+    return h;
+  }
+
+  function findOrCreateDriveFile(cb){
+    fetch("https://www.googleapis.com/drive/v3/files?q=" +
+      encodeURIComponent("name='" + DRIVE_FILE_NAME + "' and trashed=false") +
+      "&fields=files(id,name)", { headers: driveHeaders() })
+      .then(function(r){
+        if(r.status === 401){ cb(false); return null; }
+        return r.json();
+      })
+      .then(function(res){
+        if(!res) return;
+        if(res.files && res.files.length){
+          driveFileId = res.files[0].id;
+          cb(true);
+        } else {
+          // create a new empty file
+          var metadata = { name: DRIVE_FILE_NAME, mimeType:"application/json" };
+          fetch("https://www.googleapis.com/drive/v3/files", {
+            method:"POST",
+            headers: driveHeaders({ "Content-Type":"application/json" }),
+            body: JSON.stringify(metadata)
+          }).then(function(r2){ return r2.json(); })
+            .then(function(file){
+              driveFileId = file.id;
+              cb(true);
+            }).catch(function(){ cb(false); });
+        }
+      }).catch(function(){ cb(false); });
+  }
+
+  function loadFromDrive(cb){
+    if(!driveFileId){ cb(); return; }
+    fetch("https://www.googleapis.com/drive/v3/files/" + driveFileId + "?alt=media",
+      { headers: driveHeaders() })
+      .then(function(r){
+        if(r.status === 404 || r.status === 204) return null;
+        return r.text();
+      })
+      .then(function(text){
+        if(text){
+          try{
+            var remote = JSON.parse(text);
+            // Drive is the source of truth once signed in
+            data = remote;
+            localStorage.setItem(STORE_KEY, JSON.stringify(data));
+            refreshAllViews();
+          }catch(e){ /* empty/corrupt file, keep local data and it'll be written on next save */ }
+        }
+        cb();
+      }).catch(function(){ cb(); });
+  }
+
+  function saveToDrive(){
+    if(!accessToken || !driveFileId){
+      showSaveIndicator("offline");
+      return;
+    }
+    fetch("https://www.googleapis.com/upload/drive/v3/files/" + driveFileId + "?uploadType=media", {
+      method:"PATCH",
+      headers: driveHeaders({ "Content-Type":"application/json" }),
+      body: JSON.stringify(data)
+    }).then(function(r){
+      if(r.ok){ showSaveIndicator("saved"); }
+      else { showSaveIndicator("error"); }
+    }).catch(function(){ showSaveIndicator("error"); });
+  }
+
+  function refreshAllViews(){
+    // Re-render every part of the UI from the (newly loaded) data object.
+    var vInput = document.getElementById("vehicleNumber");
+    if(vInput) vInput.value = data.vehicleNumber || "";
+    if(typeof updateKmReadout === "function") updateKmReadout();
+    if(typeof renderDiaryList === "function") renderDiaryList();
+    if(typeof renderFuelList === "function") renderFuelList();
+    if(typeof renderPartList === "function") renderPartList();
+    if(typeof renderOverview === "function") renderOverview();
+    var odo = document.getElementById("currentOdoDisplay");
+    if(odo && typeof getLastKmReading === "function") odo.textContent = fmtKm(getLastKmReading());
+  }
+
+  function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+
+  function todayISO(){
+    // Always use Indian Standard Time (UTC+5:30), regardless of device timezone
+    var now = new Date();
+    var utcMs = now.getTime() + (now.getTimezoneOffset() * 60000);
+    var istMs = utcMs + (5.5 * 60 * 60000);
+    var ist = new Date(istMs);
+    var y = ist.getFullYear();
+    var m = String(ist.getMonth()+1).padStart(2,"0");
+    var d = String(ist.getDate()).padStart(2,"0");
+    return y + "-" + m + "-" + d;
+  }
+
+  function nowISTTimeString(){
+    var now = new Date();
+    var utcMs = now.getTime() + (now.getTimezoneOffset() * 60000);
+    var istMs = utcMs + (5.5 * 60 * 60000);
+    var ist = new Date(istMs);
+    var hh = ist.getHours();
+    var mm = String(ist.getMinutes()).padStart(2,"0");
+    var ampm = hh >= 12 ? "PM" : "AM";
+    var h12 = hh % 12; if(h12 === 0) h12 = 12;
+    return h12 + ":" + mm + " " + ampm + " IST";
+  }
+
+  function fmtMoney(n){
+    n = Math.round(Number(n)||0);
+    return "₹" + n.toLocaleString("en-IN");
+  }
+  function fmtKm(n){
+    n = Math.round(Number(n)||0);
+    return n.toLocaleString("en-IN");
+  }
+  function fmtDateShort(iso){
+    if(!iso) return "—";
+    var parts = iso.split("-");
+    var months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    return parts[2] + " " + months[parseInt(parts[1],10)-1];
+  }
+
+  function showToast(msg){
+    var t = document.getElementById("toast");
+    t.textContent = msg;
+    t.classList.add("show");
+    setTimeout(function(){ t.classList.remove("show"); }, 2400);
+  }
+
+  /* ---------- Image compression ---------- */
+  function fileToCompressedDataURL(file, cb){
+    if(file.type === "application/pdf"){
+      var reader = new FileReader();
+      reader.onload = function(){
+        cb({ name:file.name, type:"pdf", data:reader.result });
+      };
+      reader.readAsDataURL(file);
+      return;
+    }
+    var img = new Image();
+    var reader2 = new FileReader();
+    reader2.onload = function(){
+      img.onload = function(){
+        var maxDim = 1280;
+        var w = img.width, h = img.height;
+        if(w > h && w > maxDim){ h = Math.round(h * maxDim/w); w = maxDim; }
+        else if(h > maxDim){ w = Math.round(w * maxDim/h); h = maxDim; }
+        var canvas = document.createElement("canvas");
+        canvas.width = w; canvas.height = h;
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(img,0,0,w,h);
+        var dataUrl = canvas.toDataURL("image/jpeg", 0.7);
+        cb({ name:file.name, type:"image", data:dataUrl });
+      };
+      img.src = reader2.result;
+    };
+    reader2.readAsDataURL(file);
+  }
+
+  /* ---------- Generic upload zone wiring ---------- */
+  function wireUpload(zoneId, inputId, thumbsId, getDocsArr, setDocsArr){
+    var zone = document.getElementById(zoneId);
+    var input = document.getElementById(inputId);
+    zone.addEventListener("click", function(){ input.click(); });
+    input.addEventListener("change", function(){
+      var files = Array.prototype.slice.call(input.files);
+      var remaining = files.length;
+      if(!remaining) return;
+      files.forEach(function(file){
+        fileToCompressedDataURL(file, function(doc){
+          var arr = getDocsArr();
+          arr.push(doc);
+          setDocsArr(arr);
+          renderThumbs(thumbsId, getDocsArr(), setDocsArr);
+          remaining--;
+        });
+      });
+      input.value = "";
+    });
+  }
+
+  function renderThumbs(thumbsId, docs, setDocsArr){
+    var el = document.getElementById(thumbsId);
+    el.innerHTML = "";
+    docs.forEach(function(doc, idx){
+      var div = document.createElement("div");
+      div.className = "doc-thumb";
+      if(doc.type === "image"){
+        var img = document.createElement("img");
+        img.src = doc.data;
+        div.appendChild(img);
+      } else {
+        var span = document.createElement("span");
+        span.className = "pdf-icon";
+        span.textContent = "PDF";
+        div.appendChild(span);
+      }
+      div.addEventListener("click", function(e){
+        if(e.target.classList.contains("remove")) return;
+        openDocViewer(doc);
+      });
+      var rm = document.createElement("div");
+      rm.className = "remove";
+      rm.textContent = "×";
+      rm.addEventListener("click", function(e){
+        e.stopPropagation();
+        var arr = docs.slice();
+        arr.splice(idx,1);
+        setDocsArr(arr);
+        renderThumbs(thumbsId, arr, setDocsArr);
+      });
+      div.appendChild(rm);
+      el.appendChild(div);
+    });
+  }
+
+  function openDocViewer(doc){
+    var body = document.getElementById("docModalBody");
+    body.innerHTML = "";
+    if(doc.type === "image"){
+      var img = document.createElement("img");
+      img.className = "doc-viewer-img";
+      img.src = doc.data;
+      body.appendChild(img);
+    } else {
+      var p = document.createElement("p");
+      p.style.fontSize = "13px";
+      p.style.marginBottom = "12px";
+      p.textContent = doc.name || "Document.pdf";
+      body.appendChild(p);
+      var a = document.createElement("a");
+      a.href = doc.data;
+      a.download = doc.name || "document.pdf";
+      a.className = "btn full";
+      a.textContent = "Open / download PDF";
+      body.appendChild(a);
+    }
+    document.getElementById("docModal").classList.add("open");
+  }
+  document.getElementById("closeDocModal").addEventListener("click", function(){
+    document.getElementById("docModal").classList.remove("open");
+  });
+  document.getElementById("docModal").addEventListener("click", function(e){
+    if(e.target.id === "docModal") e.target.classList.remove("open");
+  });
+
+  /* ---------- Tabs ---------- */
+  var tabs = document.querySelectorAll(".tab");
+  tabs.forEach(function(tab){
+    tab.addEventListener("click", function(){
+      tabs.forEach(function(t){ t.classList.remove("active"); });
+      tab.classList.add("active");
+      document.querySelectorAll(".page").forEach(function(p){ p.classList.remove("active"); });
+      document.getElementById("page-" + tab.dataset.page).classList.add("active");
+      if(tab.dataset.page === "overview") renderOverview();
+    });
+  });
+
+  /* ---------- Vehicle number ---------- */
+  var vehicleInput = document.getElementById("vehicleNumber");
+  vehicleInput.value = data.vehicleNumber || "";
+  vehicleInput.addEventListener("input", function(){
+    data.vehicleNumber = vehicleInput.value.toUpperCase();
+    vehicleInput.value = data.vehicleNumber;
+    persist();
+  });
+
+  /* ---------- Dark mode ---------- */
+  function applyMode(){
+    document.body.setAttribute("data-mode", data.darkMode ? "dark" : "light");
+  }
+  document.getElementById("themeToggle").addEventListener("click", function(){
+    data.darkMode = !data.darkMode;
+    applyMode();
+    persist();
+  });
+  applyMode();
+
+  /* ---------- Export backup ---------- */
+  document.getElementById("exportBtn").addEventListener("click", function(){
+    var blob = new Blob([JSON.stringify(data, null, 2)], {type:"application/json"});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    var vn = (data.vehicleNumber || "logbook").replace(/\s+/g,"_");
+    a.download = vn + "_backup_" + todayISO() + ".json";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast("Backup file downloaded");
+  });
+
+  /* ====================================================================
+     PAGE 1: DAILY DIARY
+     ==================================================================== */
+  var diaryDocs = [];
+  document.getElementById("diaryDate").value = todayISO();
+
+  wireUpload("diaryUploadZone","diaryFileInput","diaryDocThumbs",
+    function(){ return diaryDocs; },
+    function(arr){ diaryDocs = arr; }
+  );
+
+  function getLastKmReading(beforeDate){
+    // find most recent diary entry's kmToday strictly before/at given date sort
+    var sorted = data.diary.slice().sort(function(a,b){ return a.date.localeCompare(b.date) || a.id.localeCompare(b.id); });
+    if(!sorted.length) return 0;
+    return sorted[sorted.length-1].kmToday || 0;
+  }
+
+  function updateKmReadout(){
+    var prev = getLastKmReading();
+    var todayVal = parseFloat(document.getElementById("diaryKmToday").value) || 0;
+    document.getElementById("kmPrevDisplay").textContent = prev ? fmtKm(prev) : "—";
+    document.getElementById("kmTodayDisplay").textContent = todayVal ? fmtKm(todayVal) : "—";
+    var run = todayVal && prev ? (todayVal - prev) : (todayVal && !prev ? todayVal : null);
+    var resultEl = document.getElementById("kmRunDisplay");
+    if(run === null){
+      resultEl.textContent = "—";
+    } else if(run < 0){
+      resultEl.textContent = "⚠";
+      resultEl.title = "Today's reading is lower than the previous reading";
+    } else {
+      resultEl.textContent = fmtKm(run);
+    }
+  }
+  document.getElementById("diaryKmToday").addEventListener("input", updateKmReadout);
+
+  document.getElementById("currentOdoDisplay").textContent = fmtKm(getLastKmReading());
+
+  document.getElementById("saveDiaryBtn").addEventListener("click", function(){
+    var date = document.getElementById("diaryDate").value;
+    var route = document.getElementById("diaryRoute").value.trim();
+    var collection = parseFloat(document.getElementById("diaryCollection").value) || 0;
+    var kmToday = parseFloat(document.getElementById("diaryKmToday").value) || 0;
+
+    if(!date){ showToast("Pick a date first"); return; }
+    if(!kmToday){ showToast("Enter today's km reading"); return; }
+
+    var kmPrev = getLastKmReading();
+    var kmRun = kmPrev ? (kmToday - kmPrev) : 0;
+
+    var entry = {
+      id: uid(),
+      date: date,
+      route: route,
+      collection: collection,
+      kmPrev: kmPrev,
+      kmToday: kmToday,
+      kmRun: kmRun,
+      docs: diaryDocs
+    };
+    data.diary.push(entry);
+    persist();
+
+    // reset form
+    document.getElementById("diaryRoute").value = "";
+    document.getElementById("diaryCollection").value = "";
+    document.getElementById("diaryKmToday").value = "";
+    diaryDocs = [];
+    renderThumbs("diaryDocThumbs", [], function(){});
+    document.getElementById("diaryDate").value = todayISO();
+    updateKmReadout();
+    document.getElementById("currentOdoDisplay").textContent = fmtKm(getLastKmReading());
+
+    renderDiaryList();
+    showToast("Diary entry saved");
+  });
+
+  function deleteDiaryEntry(id){
+    data.diary = data.diary.filter(function(e){ return e.id !== id; });
+    persist();
+    renderDiaryList();
+    document.getElementById("currentOdoDisplay").textContent = fmtKm(getLastKmReading());
+    updateKmReadout();
+  }
+
+  function renderDiaryList(){
+    var list = document.getElementById("diaryList");
+    var sorted = data.diary.slice().sort(function(a,b){ return b.date.localeCompare(a.date); }).slice(0,30);
+    if(!sorted.length){
+      list.innerHTML = '<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg><p>No diary entries yet. Add your first trip above.</p></div>';
+      return;
+    }
+    list.innerHTML = "";
+    sorted.forEach(function(e){
+      var row = document.createElement("div");
+      row.className = "entry-row";
+      var thumb = "";
+      row.innerHTML =
+        '<div class="date-chip">' + fmtDateShort(e.date) + '</div>' +
+        '<div class="main">' +
+          '<p class="title">' + (e.route || "Trip") + '</p>' +
+          '<p class="sub">' + fmtKm(e.kmRun) + ' km run · ' + fmtKm(e.kmPrev) + ' → ' + fmtKm(e.kmToday) + '</p>' +
+        '</div>' +
+        '<div class="amt income">' + fmtMoney(e.collection) + '</div>' +
+        '<div class="row-actions">' +
+          (e.docs && e.docs.length ? '<button class="view-doc" title="View documents"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></button>' : '') +
+          '<button class="del-entry" title="Delete"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2m2 0v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V6"/></svg></button>' +
+        '</div>';
+      row.querySelector(".del-entry").addEventListener("click", function(){
+        if(confirm("Delete this diary entry?")) deleteDiaryEntry(e.id);
+      });
+      var viewBtn = row.querySelector(".view-doc");
+      if(viewBtn){
+        viewBtn.addEventListener("click", function(){ openDocViewer(e.docs[0]); });
+      }
+      list.appendChild(row);
+    });
+  }
+
+  updateKmReadout();
+  renderDiaryList();
+
+  /* ====================================================================
+     PAGE 2: FUEL LOG
+     ==================================================================== */
+  var fuelDocs = [];
+  document.getElementById("fuelDate").value = todayISO();
+
+  wireUpload("fuelUploadZone","fuelFileInput","fuelDocThumbs",
+    function(){ return fuelDocs; },
+    function(arr){ fuelDocs = arr; }
+  );
+
+  document.getElementById("saveFuelBtn").addEventListener("click", function(){
+    var date = document.getElementById("fuelDate").value;
+    var amount = parseFloat(document.getElementById("fuelAmount").value) || 0;
+    var remarks = document.getElementById("fuelRemarks").value.trim();
+
+    if(!date){ showToast("Pick a date first"); return; }
+    if(!amount){ showToast("Enter the amount"); return; }
+
+    data.fuel.push({ id: uid(), date:date, amount:amount, remarks:remarks, docs:fuelDocs });
+    persist();
+
+    document.getElementById("fuelAmount").value = "";
+    document.getElementById("fuelRemarks").value = "";
+    fuelDocs = [];
+    renderThumbs("fuelDocThumbs", [], function(){});
+    document.getElementById("fuelDate").value = todayISO();
+
+    renderFuelList();
+    showToast("Fuel entry saved");
+  });
+
+  function deleteFuelEntry(id){
+    data.fuel = data.fuel.filter(function(e){ return e.id !== id; });
+    persist();
+    renderFuelList();
+  }
+
+  function renderFuelList(){
+    var list = document.getElementById("fuelList");
+    var sorted = data.fuel.slice().sort(function(a,b){ return b.date.localeCompare(a.date); }).slice(0,30);
+    if(!sorted.length){
+      list.innerHTML = '<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 22h12M5 22V8l5-4 5 4v14"/></svg><p>No fuel entries yet.</p></div>';
+      return;
+    }
+    list.innerHTML = "";
+    sorted.forEach(function(e){
+      var row = document.createElement("div");
+      row.className = "entry-row";
+      row.innerHTML =
+        '<div class="date-chip">' + fmtDateShort(e.date) + '</div>' +
+        '<div class="main">' +
+          '<p class="title">' + (e.remarks || "Fuel") + '</p>' +
+          '<p class="sub">Fuel expense</p>' +
+        '</div>' +
+        '<div class="amt expense">' + fmtMoney(e.amount) + '</div>' +
+        '<div class="row-actions">' +
+          (e.docs && e.docs.length ? '<button class="view-doc" title="View bill"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></button>' : '') +
+          '<button class="del-entry" title="Delete"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2m2 0v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V6"/></svg></button>' +
+        '</div>';
+      row.querySelector(".del-entry").addEventListener("click", function(){
+        if(confirm("Delete this fuel entry?")) deleteFuelEntry(e.id);
+      });
+      var viewBtn = row.querySelector(".view-doc");
+      if(viewBtn){
+        viewBtn.addEventListener("click", function(){ openDocViewer(e.docs[0]); });
+      }
+      list.appendChild(row);
+    });
+  }
+  renderFuelList();
+
+  /* ====================================================================
+     PAGE 3: PARTS / MAINTENANCE
+     ==================================================================== */
+  var partDocs = [];
+  document.getElementById("partDate").value = todayISO();
+
+  wireUpload("partUploadZone","partFileInput","partDocThumbs",
+    function(){ return partDocs; },
+    function(arr){ partDocs = arr; }
+  );
+
+  document.getElementById("savePartBtn").addEventListener("click", function(){
+    var date = document.getElementById("partDate").value;
+    var km = parseFloat(document.getElementById("partKm").value) || 0;
+    var name = document.getElementById("partName").value.trim();
+    var amount = parseFloat(document.getElementById("partAmount").value) || 0;
+
+    if(!date){ showToast("Pick a date first"); return; }
+    if(!name){ showToast("Enter the part name"); return; }
+    if(!amount){ showToast("Enter the amount"); return; }
+
+    data.parts.push({ id: uid(), date:date, km:km, name:name, amount:amount, docs:partDocs });
+    persist();
+
+    document.getElementById("partKm").value = "";
+    document.getElementById("partName").value = "";
+    document.getElementById("partAmount").value = "";
+    partDocs = [];
+    renderThumbs("partDocThumbs", [], function(){});
+    document.getElementById("partDate").value = todayISO();
+
+    renderPartList();
+    showToast("Part change saved");
+  });
+
+  function deletePartEntry(id){
+    data.parts = data.parts.filter(function(e){ return e.id !== id; });
+    persist();
+    renderPartList();
+  }
+
+  function renderPartList(){
+    var list = document.getElementById("partList");
+    var sorted = data.parts.slice().sort(function(a,b){ return b.date.localeCompare(a.date); }).slice(0,30);
+    if(!sorted.length){
+      list.innerHTML = '<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/></svg><p>No part changes logged yet.</p></div>';
+      return;
+    }
+    list.innerHTML = "";
+    sorted.forEach(function(e){
+      var row = document.createElement("div");
+      row.className = "entry-row";
+      row.innerHTML =
+        '<div class="date-chip">' + fmtDateShort(e.date) + '</div>' +
+        '<div class="main">' +
+          '<p class="title">' + e.name + '</p>' +
+          '<p class="sub">At ' + fmtKm(e.km) + ' km</p>' +
+        '</div>' +
+        '<div class="amt expense">' + fmtMoney(e.amount) + '</div>' +
+        '<div class="row-actions">' +
+          (e.docs && e.docs.length ? '<button class="view-doc" title="View bill"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></button>' : '') +
+          '<button class="del-entry" title="Delete"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2m2 0v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V6"/></svg></button>' +
+        '</div>';
+      row.querySelector(".del-entry").addEventListener("click", function(){
+        if(confirm("Delete this part entry?")) deletePartEntry(e.id);
+      });
+      var viewBtn = row.querySelector(".view-doc");
+      if(viewBtn){
+        viewBtn.addEventListener("click", function(){ openDocViewer(e.docs[0]); });
+      }
+      list.appendChild(row);
+    });
+  }
+  renderPartList();
+
+  /* ====================================================================
+     PAGE 4: OVERVIEW
+     ==================================================================== */
+  var overviewMonth = new Date(); // current month being viewed
+  overviewMonth.setDate(1);
+
+  document.getElementById("prevMonthBtn").addEventListener("click", function(){
+    overviewMonth.setMonth(overviewMonth.getMonth()-1);
+    renderOverview();
+  });
+  document.getElementById("nextMonthBtn").addEventListener("click", function(){
+    overviewMonth.setMonth(overviewMonth.getMonth()+1);
+    renderOverview();
+  });
+
+  function monthKey(d){
+    return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0");
+  }
+  function inMonth(dateStr, d){
+    return dateStr && dateStr.slice(0,7) === monthKey(d);
+  }
+
+  function renderOverview(){
+    var monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+    document.getElementById("monthLabel").textContent = monthNames[overviewMonth.getMonth()] + " " + overviewMonth.getFullYear();
+
+    var diaryThisMonth = data.diary.filter(function(e){ return inMonth(e.date, overviewMonth); });
+    var fuelThisMonth = data.fuel.filter(function(e){ return inMonth(e.date, overviewMonth); });
+    var partsThisMonth = data.parts.filter(function(e){ return inMonth(e.date, overviewMonth); });
+
+    var totalCollection = diaryThisMonth.reduce(function(s,e){ return s + (e.collection||0); }, 0);
+    var totalKm = diaryThisMonth.reduce(function(s,e){ return s + (e.kmRun>0?e.kmRun:0); }, 0);
+    var totalFuel = fuelThisMonth.reduce(function(s,e){ return s + (e.amount||0); }, 0);
+    var totalParts = partsThisMonth.reduce(function(s,e){ return s + (e.amount||0); }, 0);
+    var totalExpense = totalFuel + totalParts;
+    var net = totalCollection - totalExpense;
+
+    document.getElementById("statCollection").textContent = fmtMoney(totalCollection);
+    document.getElementById("statExpense").textContent = fmtMoney(totalExpense);
+    document.getElementById("statNet").textContent = fmtMoney(net);
+    document.getElementById("statNet").style.color = net >= 0 ? "var(--green)" : "var(--rust)";
+    document.getElementById("statKm").textContent = fmtKm(totalKm);
+
+    document.getElementById("avgCollection").value = diaryThisMonth.length ? fmtMoney(totalCollection/diaryThisMonth.length) : "—";
+    document.getElementById("avgKm").value = diaryThisMonth.length ? fmtKm(totalKm/diaryThisMonth.length) : "—";
+
+    // breakdown bar
+    var bar = document.getElementById("breakdownBar");
+    var legend = document.getElementById("breakdownLegend");
+    bar.innerHTML = "";
+    legend.innerHTML = "";
+    if(totalExpense > 0){
+      var fuelPct = (totalFuel/totalExpense)*100;
+      var partsPct = (totalParts/totalExpense)*100;
+      var seg1 = document.createElement("div");
+      seg1.className = "seg";
+      seg1.style.width = fuelPct + "%";
+      seg1.style.background = "var(--amber)";
+      var seg2 = document.createElement("div");
+      seg2.className = "seg";
+      seg2.style.width = partsPct + "%";
+      seg2.style.background = "var(--rust)";
+      bar.appendChild(seg1);
+      bar.appendChild(seg2);
+      legend.innerHTML =
+        '<span><span class="dot" style="background:var(--amber)"></span>Fuel — ' + fmtMoney(totalFuel) + '</span>' +
+        '<span><span class="dot" style="background:var(--rust)"></span>Parts — ' + fmtMoney(totalParts) + '</span>';
+    } else {
+      legend.innerHTML = '<span>No expenses logged this month yet.</span>';
+    }
+
+    // days logged list
+    var list = document.getElementById("overviewDiaryList");
+    var sorted = diaryThisMonth.slice().sort(function(a,b){ return b.date.localeCompare(a.date); });
+    if(!sorted.length){
+      list.innerHTML = '<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg><p>No diary entries for this month.</p></div>';
+      return;
+    }
+    list.innerHTML = "";
+    sorted.forEach(function(e){
+      var row = document.createElement("div");
+      row.className = "entry-row";
+      row.innerHTML =
+        '<div class="date-chip">' + fmtDateShort(e.date) + '</div>' +
+        '<div class="main">' +
+          '<p class="title">' + (e.route || "Trip") + '</p>' +
+          '<p class="sub">' + fmtKm(e.kmRun) + ' km</p>' +
+        '</div>' +
+        '<div class="amt income">' + fmtMoney(e.collection) + '</div>';
+      list.appendChild(row);
+    });
+  }
+
+  renderOverview();
+
+  initSignIn();
+
+})();
+</script>
+</body>
+</html>
