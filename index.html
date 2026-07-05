@@ -1,0 +1,2912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Riya Tours and Travels — Logbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<style>
+  :root{
+    --ink:#2E4057;
+    --ink-soft:#6B7A8F;
+    --paper:#FFFFFF;
+    --paper-dim:#F4F7FA;
+    --paper-card:#FFFFFF;
+    --line:#E1E7ED;
+    --line-strong:#C4D0DC;
+    --amber:#2F8F7A;
+    --amber-deep:#23705F;
+    --amber-pale:#E3F3EF;
+    --rust:#D1685A;
+    --rust-pale:#FBEAE7;
+    --green:#4C9A6A;
+    --green-pale:#E7F5EC;
+    --violet:#8B7FC7;
+    --violet-pale:#EEEBFA;
+    --shadow:0 1px 2px rgba(46,64,87,0.06);
+    --radius:10px;
+    --font-display:'Space Grotesk', sans-serif;
+    --font-mono:'JetBrains Mono', monospace;
+  }
+  [data-mode="dark"]{
+    --ink:#2E4057;
+    --ink-soft:#6B7A8F;
+    --paper:#FFFFFF;
+    --paper-dim:#F4F7FA;
+    --paper-card:#FFFFFF;
+    --line:#E1E7ED;
+    --line-strong:#C4D0DC;
+    --amber:#2F8F7A;
+    --amber-deep:#23705F;
+    --amber-pale:#E3F3EF;
+    --rust:#D1685A;
+    --rust-pale:#FBEAE7;
+    --green:#4C9A6A;
+    --green-pale:#E7F5EC;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--font-display);
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+  .app{max-width:760px;margin:0 auto;padding:0 16px 80px;}
+
+  /* ===== Company bar ===== */
+  .company-bar{
+    text-align:center;padding:14px 10px 12px;border-bottom:1.5px solid var(--line);margin-bottom:2px;
+  }
+  .company-name{
+    font-size:18px;font-weight:700;letter-spacing:0.02em;color:var(--amber-deep);
+  }
+  .company-meta{
+    font-size:12px;color:var(--ink-soft);margin-top:3px;letter-spacing:0.02em;
+  }
+
+  /* ===== Header ===== */
+  .topbar{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 0 14px;border-bottom:1.5px solid var(--line);margin-bottom:4px;
+  }
+  .brand{display:flex;align-items:center;gap:10px;}
+  .brand-mark{
+    width:34px;height:34px;border-radius:6px;background:var(--amber);
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+  .brand-mark svg{width:20px;height:20px;}
+  .brand-text h1{font-size:17px;margin:0;font-weight:700;letter-spacing:-0.01em;}
+  .brand-text p{font-size:11px;margin:0;color:var(--ink-soft);letter-spacing:0.04em;text-transform:uppercase;}
+  .top-actions{display:flex;gap:8px;align-items:center;}
+  .icon-btn{
+    width:36px;height:36px;border-radius:8px;border:1.5px solid var(--line-strong);
+    background:var(--paper-card);display:flex;align-items:center;justify-content:center;
+    cursor:pointer;color:var(--ink);
+  }
+  .icon-btn:hover{border-color:var(--amber-deep);}
+  .icon-btn svg{width:17px;height:17px;}
+
+  /* ===== Vehicle plate ===== */
+  .plate-row{display:flex;align-items:center;gap:10px;margin:14px 0 18px;}
+  .plate{
+    font-family:var(--font-mono);font-weight:700;font-size:17px;letter-spacing:0.06em;
+    background:var(--amber-pale);color:var(--amber-deep);padding:9px 16px;border-radius:6px;
+    border:1.5px solid var(--amber);
+    display:flex;align-items:center;gap:8px;
+  }
+  .plate input{
+    background:transparent;border:none;color:inherit;font-family:inherit;font-weight:inherit;
+    font-size:inherit;letter-spacing:inherit;width:120px;outline:none;
+  }
+  .odo-pill{
+    font-family:var(--font-mono);font-size:12px;color:var(--ink-soft);
+    border:1.5px dashed var(--line-strong);padding:7px 12px;border-radius:6px;
+  }
+  .odo-pill b{color:var(--ink);font-weight:700;}
+
+  /* ===== Tabs ===== */
+  .tabs{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:22px;
+    position:sticky;top:0;background:var(--paper);padding:10px 0;z-index:10;
+
+  }
+  .tab{
+    font-family:var(--font-display);font-size:12.5px;font-weight:500;
+    padding:10px 4px;border-radius:8px;border:1.5px solid var(--line);
+    background:var(--paper-card);color:var(--ink-soft);cursor:pointer;text-align:center;
+    transition:border-color .12s;
+  }
+  .tab span{display:block;font-size:10px;text-transform:uppercase;letter-spacing:0.05em;opacity:0.7;margin-bottom:2px;}
+  .tab.active{border-color:var(--ink);color:var(--ink);background:var(--amber-pale);font-weight:700;}
+
+  .page{display:none;}
+  .page.active{display:block;animation:fadein .15s ease;}
+  @keyframes fadein{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:none;}}
+
+  /* ===== Section heading ===== */
+  .section-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px;}
+  .section-head h2{font-size:15px;margin:0;font-weight:700;}
+  .section-head .hint{font-size:12px;color:var(--ink-soft);}
+
+  /* ===== Form card ===== */
+  .card{
+    background:var(--paper-card);border:1.5px solid var(--line);border-radius:var(--radius);
+    padding:18px;margin-bottom:16px;box-shadow:var(--shadow);
+  }
+  .card-title{
+    font-size:11px;text-transform:uppercase;letter-spacing:0.07em;color:var(--ink-soft);
+    font-weight:700;margin:0 0 14px;display:flex;align-items:center;gap:6px;
+  }
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .field{margin-bottom:12px;}
+  .field label{
+    display:block;font-size:12px;color:var(--ink-soft);margin-bottom:5px;font-weight:500;
+  }
+  .field input,.field select,.field textarea{
+    width:100%;padding:10px 11px;border:1.5px solid var(--line-strong);border-radius:7px;
+    background:var(--paper);color:var(--ink);font-family:var(--font-display);font-size:14px;
+    outline:none;
+  }
+  .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--amber-deep);}
+  .field input[type="number"],.field .mono-input{font-family:var(--font-mono);}
+  .field textarea{resize:vertical;min-height:60px;}
+
+  .date-range-row{display:flex;align-items:center;gap:8px;}
+  .date-range-row input{flex:1;}
+  .date-range-row .to-sep{font-size:12px;color:var(--ink-soft);flex-shrink:0;}
+  .field-note{font-size:11px;color:var(--ink-soft);margin:5px 0 0;}
+  .fuel-check-row{
+    display:flex !important; align-items:center; gap:9px; cursor:pointer;
+    font-size:13.5px; font-weight:500; color:var(--ink); margin-bottom:0 !important;
+  }
+  .fuel-check-row input[type="checkbox"]{width:18px;height:18px;accent-color:var(--amber-deep);cursor:pointer;}
+  .expense-check-grid{
+    display:grid;grid-template-columns:1fr 1fr;gap:10px;
+    background:var(--paper-dim);border:1.5px solid var(--line);border-radius:8px;padding:12px 14px;
+  }
+  .fuel-option span{color:var(--rust);font-weight:600;}
+  .others-option span{color:var(--ink-soft);}
+  @media(max-width:420px){ .expense-check-grid{grid-template-columns:1fr;} }
+
+  .dest-list{display:flex;flex-direction:column;gap:6px;max-height:50vh;overflow-y:auto;margin-top:12px;}
+
+  .dest-chip-row{display:flex;flex-wrap:wrap;gap:7px;min-height:36px;}
+  .dest-chip{
+    display:inline-flex;align-items:center;gap:6px;background:var(--amber-pale);
+    border:1.5px solid var(--amber);color:var(--amber-deep);border-radius:20px;
+    padding:6px 8px 6px 12px;font-size:12.5px;font-weight:500;
+  }
+  .dest-chip .chip-remove{
+    width:16px;height:16px;border-radius:50%;background:var(--amber-deep);color:#FFFFFF;
+    display:flex;align-items:center;justify-content:center;font-size:10px;cursor:pointer;flex-shrink:0;
+  }
+  .dest-chip-empty{font-size:12px;color:var(--ink-soft);padding:7px 0;}
+  .dest-item{
+    padding:11px 14px;border:1.5px solid var(--line);border-radius:8px;cursor:pointer;
+    font-size:13.5px;background:var(--paper-card);
+  }
+  .dest-item:hover{border-color:var(--amber-deep);background:var(--amber-pale);}
+  .dest-item .count-tag{
+    float:right;font-size:11px;color:var(--ink-soft);font-family:var(--font-mono);
+  }
+
+  .part-items{display:flex;flex-direction:column;gap:8px;}
+  .part-item-row{
+    display:flex;align-items:center;gap:8px;background:var(--paper-dim);border:1.5px solid var(--line);
+    border-radius:8px;padding:9px 10px;
+  }
+  .part-item-row .pname{flex:1;font-size:13px;cursor:pointer;}
+  .part-item-row .pamt{width:90px;}
+  .part-item-row .pamt input{
+    width:100%;padding:7px 8px;border:1.5px solid var(--line-strong);border-radius:6px;
+    font-family:var(--font-mono);font-size:13px;background:var(--paper);color:var(--ink);outline:none;
+  }
+  .part-item-row .premove{
+    width:26px;height:26px;border-radius:6px;border:1px solid var(--line);background:var(--paper);
+    display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--ink-soft);flex-shrink:0;
+  }
+  .part-item-row .premove:hover{color:var(--rust);border-color:var(--rust);}
+
+  .life-row{
+    background:var(--paper-card);border:1.5px solid var(--line);border-radius:8px;
+    padding:11px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;
+  }
+  .life-row .pname{font-size:13px;font-weight:500;}
+  .life-row .pmeta{font-size:11px;color:var(--ink-soft);margin-top:2px;}
+  .life-row .pkm{font-family:var(--font-mono);font-weight:700;font-size:15px;color:var(--amber-deep);white-space:nowrap;}
+  .life-row .pkm.warn{color:var(--rust);}
+
+  .km-readout{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    background:var(--paper-dim);color:var(--ink);border-radius:8px;padding:12px 16px;margin:4px 0 14px;
+    border:1.5px solid var(--line);
+  }
+  .km-readout .seg{text-align:center;flex:1;}
+  .km-readout .seg .num{font-family:var(--font-mono);font-size:18px;font-weight:700;}
+  .km-readout .seg .lbl{font-size:9.5px;text-transform:uppercase;letter-spacing:0.06em;color:var(--ink-soft);margin-top:2px;}
+  .km-readout .op{font-size:16px;color:var(--ink-soft);font-family:var(--font-mono);}
+  .km-readout .seg.result .num{color:var(--amber-deep);}
+
+  .upload-zone{
+    border:1.5px dashed var(--line-strong);border-radius:8px;padding:16px;text-align:center;
+    cursor:pointer;background:var(--paper-dim);transition:border-color .12s;
+  }
+  .upload-zone:hover{border-color:var(--amber-deep);}
+  .upload-zone svg{width:22px;height:22px;color:var(--ink-soft);margin-bottom:6px;}
+  .upload-zone p{margin:0;font-size:12.5px;color:var(--ink-soft);}
+  .upload-zone input{display:none;}
+  .doc-thumbs{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+  .doc-thumb{
+    width:56px;height:56px;border-radius:7px;border:1.5px solid var(--line-strong);
+    background:var(--paper);display:flex;align-items:center;justify-content:center;
+    position:relative;overflow:hidden;cursor:pointer;
+  }
+  .doc-thumb img{width:100%;height:100%;object-fit:cover;}
+  .doc-thumb .pdf-icon{color:var(--rust);font-size:10px;font-weight:700;font-family:var(--font-mono);}
+  .doc-thumb .remove{
+    position:absolute;top:1px;right:1px;width:16px;height:16px;background:var(--rust);
+    color:#FFFFFF;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    font-size:10px;line-height:1;
+  }
+
+  .btn{
+    font-family:var(--font-display);font-weight:700;font-size:13.5px;
+    padding:11px 18px;border-radius:8px;border:1.5px solid var(--amber);
+    background:var(--amber);color:#FFFFFF;cursor:pointer;display:inline-flex;
+    align-items:center;gap:7px;
+  }
+  .btn:hover{opacity:0.88;}
+  .btn.ghost{background:transparent;color:var(--ink);border-color:var(--line-strong);}
+  .btn.full{width:100%;justify-content:center;}
+  .btn svg{width:15px;height:15px;}
+  .btn.small{padding:7px 12px;font-size:12px;}
+  .btn.danger{background:var(--rust);border-color:var(--rust);color:#fff;}
+
+  /* ===== Entry rows (list) ===== */
+  .entry-list{display:flex;flex-direction:column;gap:8px;}
+  .entry-row{
+    background:var(--paper-card);border:1.5px solid var(--line);border-radius:8px;
+    padding:12px 14px;display:flex;align-items:center;gap:12px;
+  }
+  .entry-row .date-chip{
+    font-family:var(--font-mono);font-size:11px;font-weight:700;color:var(--ink-soft);
+    background:var(--paper-dim);border-radius:6px;padding:6px 8px;text-align:center;min-width:54px;
+  }
+  .entry-row .main{flex:1;min-width:0;}
+  .entry-row .main .title{font-size:13.5px;font-weight:500;margin:0 0 2px;}
+  .entry-row .main .sub{font-size:11.5px;color:var(--ink-soft);margin:0;}
+  .entry-row .amt{font-family:var(--font-mono);font-weight:700;font-size:14px;white-space:nowrap;}
+  .entry-row .amt.income{color:var(--green);}
+  .entry-row .amt.expense{color:var(--rust);}
+  .entry-row .row-actions{display:flex;gap:4px;}
+  .entry-row .row-actions button{
+    width:28px;height:28px;border-radius:6px;border:1px solid var(--line);background:var(--paper);
+    display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--ink-soft);
+  }
+  .entry-row .row-actions button:hover{color:var(--rust);border-color:var(--rust);}
+  .ov-edit,.ov-del{
+    width:28px;height:28px;border-radius:6px;border:1px solid var(--line);background:var(--paper);
+    display:inline-flex;align-items:center;justify-content:center;cursor:pointer;color:var(--ink-soft);
+    flex-shrink:0;
+  }
+  .ov-edit:hover{color:var(--amber-deep);border-color:var(--amber-deep);}
+  .ov-del:hover{color:var(--rust);border-color:var(--rust);}
+  .entry-row .thumb-mini{
+    width:30px;height:30px;border-radius:5px;border:1px solid var(--line-strong);overflow:hidden;flex-shrink:0;
+  }
+  .entry-row .thumb-mini img{width:100%;height:100%;object-fit:cover;}
+
+  .empty-state{
+    text-align:center;padding:36px 16px;color:var(--ink-soft);
+  }
+  .empty-state svg{width:34px;height:34px;margin-bottom:10px;opacity:0.5;}
+  .empty-state p{margin:0;font-size:13px;}
+
+  /* ===== Stat cards (overview) ===== */
+  .month-switch{
+    display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;
+    background:var(--paper-card);border:1.5px solid var(--line);border-radius:8px;padding:10px 14px;
+  }
+  .month-switch button{
+    background:none;border:none;cursor:pointer;color:var(--ink);display:flex;align-items:center;
+    padding:4px;
+  }
+  .month-switch button svg{width:18px;height:18px;}
+  .month-switch .label{font-weight:700;font-size:15px;}
+
+  .range-mode-tabs{display:flex;gap:6px;margin-bottom:14px;}
+  .rmtab{
+    flex:1;text-align:center;font-size:12.5px;font-weight:500;padding:9px 4px;
+    border-radius:8px;border:1.5px solid var(--line);background:var(--paper-card);
+    color:var(--ink-soft);cursor:pointer;
+  }
+  .rmtab.active{border-color:var(--amber);color:var(--amber-deep);background:var(--amber-pale);font-weight:700;}
+
+  .dest-stat-list{display:flex;flex-direction:column;gap:7px;}
+  .dest-stat-row{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    font-size:13px;padding:4px 0;
+  }
+  .dest-stat-row .dname{color:var(--ink);}
+  .dest-stat-row .dbar-wrap{flex:1;height:7px;background:var(--paper-dim);border-radius:4px;margin:0 10px;overflow:hidden;}
+  .dest-stat-row .dbar{height:100%;background:var(--amber);}
+  .dest-stat-row .dcount{font-family:var(--font-mono);font-weight:700;font-size:12.5px;white-space:nowrap;color:var(--amber-deep);}
+
+  .chart-range-row{display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
+  .chart-range-row label{font-size:12px;color:var(--ink-soft);}
+  .chart-range-row input{
+    padding:7px 9px;border:1.5px solid var(--line-strong);border-radius:7px;
+    background:var(--paper);color:var(--ink);font-family:var(--font-display);font-size:13px;outline:none;
+  }
+  #comparisonChartWrap{width:100%;overflow-x:auto;}
+  #comparisonChartWrap svg{display:block;}
+  .chart-empty{font-size:12px;color:var(--ink-soft);text-align:center;padding:20px 0;}
+  .chart-tooltip{
+    position:absolute;transform:translate(-50%, -100%);
+    background:var(--amber-deep);color:#FFFFFF;font-size:11.5px;font-weight:600;
+    padding:6px 10px;border-radius:6px;white-space:nowrap;pointer-events:none;
+    opacity:0;transition:opacity .12s;z-index:300;font-family:var(--font-display);
+  }
+  .chart-tooltip.show{opacity:1;}
+
+  .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+  .stat-grid.wide{grid-template-columns:repeat(2,1fr);}
+  .stat-card{
+    background:var(--paper-card);border:1.5px solid var(--line);border-radius:var(--radius);
+    padding:14px 16px;
+  }
+  .stat-card .lbl{font-size:11px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:0.05em;margin:0 0 6px;font-weight:600;}
+  .stat-card .val{font-family:var(--font-mono);font-size:21px;font-weight:700;margin:0;}
+  .stat-card.income .val{color:var(--green);}
+  .stat-card.expense .val{color:var(--rust);}
+  .stat-card.net .val{color:var(--amber-deep);}
+  .stat-card .sub{font-size:11px;color:var(--ink-soft);margin:4px 0 0;}
+
+  .breakdown-bar{height:8px;border-radius:4px;background:var(--paper-dim);overflow:hidden;display:flex;margin-top:8px;}
+  .breakdown-bar .seg{height:100%;}
+
+  .legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;font-size:12px;color:var(--ink-soft);}
+  .legend .dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:5px;}
+
+  /* ===== Modal ===== */
+  .modal-overlay{
+    display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:100;
+    align-items:flex-end;justify-content:center;
+  }
+  .modal-overlay.open{display:flex;}
+  .modal{
+    background:var(--paper);width:100%;max-width:760px;border-radius:16px 16px 0 0;
+    padding:20px 16px calc(20px + env(safe-area-inset-bottom));max-height:88vh;overflow-y:auto;
+    animation:slideup .18s ease;
+  }
+  @keyframes slideup{from{transform:translateY(20px);opacity:0;}to{transform:none;opacity:1;}}
+  .modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+  .modal-head h3{margin:0;font-size:16px;font-weight:700;}
+  .modal-head button{background:none;border:none;cursor:pointer;color:var(--ink-soft);padding:4px;}
+  .modal-head button svg{width:20px;height:20px;}
+  .doc-viewer-img{width:100%;border-radius:8px;border:1px solid var(--line);}
+
+  .toast{
+    position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+    background:var(--amber-deep);color:#FFFFFF;padding:10px 18px;border-radius:8px;
+    font-size:13px;font-weight:500;z-index:200;opacity:0;pointer-events:none;
+    transition:opacity .2s, transform .2s;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(-6px);}
+
+  .save-indicator{font-size:11px;color:var(--ink-soft);display:flex;align-items:center;gap:5px;}
+  .save-indicator .dot{width:6px;height:6px;border-radius:50%;background:var(--green);}
+
+  /* ===== Sign-in gate ===== */
+  .signin-gate{
+    min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:40px 24px;text-align:center;background:var(--paper);
+  }
+  .signin-gate .gate-mark{
+    width:56px;height:56px;border-radius:12px;background:var(--amber);
+    display:flex;align-items:center;justify-content:center;margin-bottom:20px;
+  }
+  .signin-gate .gate-mark svg{width:30px;height:30px;}
+  .signin-gate h1{font-size:19px;font-weight:700;margin:0 0 4px;color:var(--amber-deep);}
+  .signin-gate .gate-sub{font-size:12.5px;color:var(--ink-soft);margin:0 0 28px;}
+  .signin-gate p.pitch{font-size:13.5px;color:var(--ink-soft);max-width:320px;margin:0 0 24px;line-height:1.6;}
+  #gsiButtonContainer{margin-bottom:14px;}
+  .signin-gate .gate-note{font-size:11.5px;color:var(--ink-soft);max-width:300px;margin-top:18px;line-height:1.6;}
+  .signin-gate .gate-note a{color:var(--amber-deep);}
+
+  /* ===== Account badge ===== */
+  .account-badge{
+    display:flex;align-items:center;gap:7px;font-size:12px;color:var(--ink-soft);
+    border:1.5px solid var(--line-strong);border-radius:20px;padding:5px 12px 5px 5px;cursor:pointer;
+  }
+  .account-badge img{width:22px;height:22px;border-radius:50%;display:none;}
+  .account-badge:hover{border-color:var(--amber-deep);}
+
+  .sync-status{font-size:11px;color:var(--ink-soft);display:flex;align-items:center;gap:5px;}
+  .sync-status .dot{width:6px;height:6px;border-radius:50%;background:var(--green);}
+  .sync-status .dot.syncing{background:var(--amber);}
+  .sync-status .dot.error{background:var(--rust);}
+
+  @media (max-width:420px){
+    .grid2{grid-template-columns:1fr;}
+    .tab{font-size:11px;padding:9px 2px;}
+    .stat-card .val{font-size:18px;}
+  }
+</style>
+</head>
+<body data-mode="light">
+
+<div class="signin-gate" id="passwordGate" style="display:none;">
+  <h1>RIYA TOURS AND TRAVELS</h1>
+  <p class="pitch">This logbook is private. Enter the access password to continue.</p>
+  <div class="field" style="width:100%; max-width:280px;">
+    <input type="password" id="accessPasswordInput" placeholder="Access password" autocomplete="off">
+  </div>
+  <button class="btn" id="accessPasswordBtn" style="margin-top:14px;">Continue</button>
+  <p class="gate-note" id="accessPasswordError" style="color:var(--rust); display:none;">That password isn't right — try again.</p>
+</div>
+
+<div class="signin-gate" id="signinGate" style="display:none;">
+  <h1>RIYA TOURS AND TRAVELS</h1>
+  <p class="pitch">Sign in with Google to open your logbook. Your daily entries, bills, and photos are saved straight to your own Google Drive, so they're there on any device you sign in from.</p>
+  <div id="gsiButtonContainer"></div>
+  <p class="gate-note" id="gateNote">Loading sign-in…</p>
+</div>
+
+<div class="app" id="mainApp" style="display:none;">
+
+  <div class="company-bar">
+    <div class="company-name">RIYA TOURS AND TRAVELS</div>
+  </div>
+
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-text">
+        <h1>Logbook</h1>
+        <p>Transport diary</p>
+      </div>
+    </div>
+    <div class="top-actions">
+      <div class="sync-status" id="saveIndicator"><span class="dot"></span><span>Synced</span></div>
+      <div class="account-badge" id="accountBadge" title="Sign out">
+        <img id="accountAvatar" src="" alt="">
+        <span id="accountLabel">Account</span>
+      </div>
+      <button class="icon-btn" id="exportBtn" title="Export backup">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15V3m0 12-4-4m4 4 4-4M4 17v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="plate-row">
+    <div class="plate">
+      <input type="text" id="vehicleNumber" placeholder="VEHICLE NO." value="">
+    </div>
+    <div class="odo-pill">Current odometer: <b id="currentOdoDisplay">—</b> km</div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" data-page="diary"><span>Page 1</span>Daily diary</div>
+    <div class="tab" data-page="fuel"><span>Page 2</span>Expenses log</div>
+    <div class="tab" data-page="parts"><span>Page 3</span>Parts</div>
+    <div class="tab" data-page="overview"><span>Page 4</span>Overview</div>
+  </div>
+
+  <!-- ===================== PAGE 1: DAILY DIARY ===================== -->
+  <div class="page active" id="page-diary">
+    <div class="section-head">
+      <h2>Today's entry</h2>
+      <span class="hint">One row per day, per trip</span>
+    </div>
+
+    <div class="card">
+      <p class="card-title">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" stroke-linecap="round"/><path d="M3 9h18M8 2v4M16 2v4" stroke-linecap="round"/></svg>
+        New diary entry
+      </p>
+      <div class="field">
+        <label>Trip dates</label>
+        <div class="date-range-row">
+          <input type="date" id="diaryDateFrom">
+          <span class="to-sep">to</span>
+          <input type="date" id="diaryDateTo">
+          <button type="button" class="btn ghost small" id="diaryTodayBtn" style="white-space:nowrap;flex-shrink:0;" title="Set both dates to today">Today</button>
+        </div>
+        <p class="field-note">Dates stay after saving — tap Today to reset to today's date.</p>
+      </div>
+      <div class="field">
+        <label>Where the vehicle went</label>
+        <div class="dest-chip-row" id="diaryDestChips"></div>
+        <button type="button" class="btn ghost small" id="addDestBtn" style="margin-top:6px;">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>
+          Add destination
+        </button>
+      </div>
+      <div class="grid2">
+        <div class="field">
+          <label>Total collection for this trip (₹)</label>
+          <input type="number" inputmode="decimal" id="diaryCollection" placeholder="0">
+        </div>
+        <div class="field">
+          <label>Last km reading (end of trip)</label>
+          <input type="number" inputmode="numeric" id="diaryKmToday" placeholder="0">
+        </div>
+      </div>
+
+      <div class="km-readout">
+        <div class="seg">
+          <div class="num" id="kmPrevDisplay">—</div>
+          <div class="lbl">Previous reading</div>
+        </div>
+        <div class="op">→</div>
+        <div class="seg">
+          <div class="num" id="kmTodayDisplay">—</div>
+          <div class="lbl">This reading</div>
+        </div>
+        <div class="op">=</div>
+        <div class="seg result">
+          <div class="num" id="kmRunDisplay">—</div>
+          <div class="lbl">Km run</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Documents for this trip (photo or PDF)</label>
+        <div class="upload-zone" id="diaryUploadZone">
+          <input type="file" id="diaryFileInput" accept="image/*,application/pdf" multiple>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 16V4m0 0-4 4m4-4 4 4" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <p>Tap to add a photo or PDF</p>
+        </div>
+        <div class="doc-thumbs" id="diaryDocThumbs"></div>
+      </div>
+
+      <div style="display:flex; gap:10px;">
+        <button class="btn full" id="saveDiaryBtn" style="margin-top:4px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span id="saveDiaryBtnLabel">Save entry</span>
+        </button>
+        <button class="btn ghost" id="cancelDiaryEditBtn" style="display:none; margin-top:4px;">Cancel</button>
+      </div>
+    </div>
+
+    <div class="section-head" style="margin-top:24px;">
+      <h2>Recent entries</h2>
+    </div>
+    <div class="entry-list" id="diaryList"></div>
+  </div>
+
+  <!-- Destination picker modal -->
+  <div class="modal-overlay" id="destModal">
+    <div class="modal">
+      <div class="modal-head">
+        <h3>Where did the vehicle go?</h3>
+        <button id="closeDestModal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      </div>
+      <div class="field">
+        <input type="text" id="destCustomInput" placeholder="Search destinations or type a new one…">
+      </div>
+      <div class="dest-list" id="destList"></div>
+    </div>
+  </div>
+
+  <!-- ===================== PAGE 2: EXPENSES LOG ===================== -->
+  <div class="page" id="page-fuel">
+    <div class="section-head">
+      <h2>Expenses log</h2>
+      <span class="hint">Fuel, toll, permit — every expense</span>
+    </div>
+
+    <div class="card">
+      <p class="card-title">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 22h12M5 22V8l5-4 5 4v14M9 12h2M17 8l2 2v8a1.5 1.5 0 0 1-3 0v-3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        New expense entry
+      </p>
+      <div class="grid2">
+        <div class="field">
+          <label>Date</label>
+          <input type="date" id="fuelDate">
+        </div>
+        <div class="field">
+          <label>Amount (₹)</label>
+          <input type="number" inputmode="decimal" id="fuelAmount" placeholder="0">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Expense type — tick all that apply</label>
+        <div class="expense-check-grid">
+          <label class="fuel-check-row fuel-option"><input type="checkbox" id="chkFuelDiesel"><span>⛽ Fuel — Diesel</span></label>
+          <label class="fuel-check-row others-option"><input type="checkbox" id="chkToll"><span>🚧 Toll</span></label>
+          <label class="fuel-check-row others-option"><input type="checkbox" id="chkPermit"><span>📋 Permit</span></label>
+          <label class="fuel-check-row others-option"><input type="checkbox" id="chkParking"><span>🅿️ Parking</span></label>
+          <label class="fuel-check-row others-option"><input type="checkbox" id="chkCommission"><span>💸 Commission</span></label>
+          <label class="fuel-check-row others-option"><input type="checkbox" id="chkYearlyDocs"><span>📄 Yearly Docs Maintenance</span></label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Additional note — optional (any other expense not listed above)</label>
+        <input type="text" id="fuelOtherDesc" placeholder="e.g. Car wash, cleaning fee…">
+        <p class="field-note">If only the note is filled (no box ticked), it's counted as Other expense. If Fuel — Diesel is ticked, the whole entry counts as Fuel regardless of other selections.</p>
+      </div>
+
+      <div class="field">
+        <label>Bill (photo or PDF)</label>
+        <div class="upload-zone" id="fuelUploadZone">
+          <input type="file" id="fuelFileInput" accept="image/*,application/pdf" multiple>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 16V4m0 0-4 4m4-4 4 4" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <p>Tap to add a photo or PDF</p>
+        </div>
+        <div class="doc-thumbs" id="fuelDocThumbs"></div>
+      </div>
+      <div style="display:flex; gap:10px;">
+        <button class="btn full" id="saveFuelBtn" style="margin-top:4px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span id="saveFuelBtnLabel">Save entry</span>
+        </button>
+        <button class="btn ghost" id="cancelFuelEditBtn" style="display:none; margin-top:4px;">Cancel</button>
+      </div>
+    </div>
+
+    <div class="section-head" style="margin-top:24px;">
+      <h2>Recent expense entries</h2>
+    </div>
+    <div class="entry-list" id="fuelList"></div>
+  </div>
+
+  <!-- ===================== PAGE 3: PARTS / MAINTENANCE ===================== -->
+  <div class="page" id="page-parts">
+    <div class="section-head">
+      <h2>Parts and maintenance</h2>
+      <span class="hint">Track wear parts and service bills</span>
+    </div>
+
+    <div class="card">
+      <p class="card-title">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94L9.7 19.3a2.83 2.83 0 0 1-4-4L11.4 9.5a6 6 0 0 1 7.94-7.94L15.6 5.3a1 1 0 0 0 0 1.4l-.9-.4Z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        New part change
+      </p>
+      <div class="grid2">
+        <div class="field">
+          <label>Date</label>
+          <input type="date" id="partDate">
+        </div>
+        <div class="field">
+          <label>Km reading when changed</label>
+          <input type="number" inputmode="numeric" id="partKm" placeholder="0">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Parts changed in this visit</label>
+        <div class="part-items" id="partItemsList"></div>
+        <button class="btn ghost small" id="addPartItemBtn" style="margin-top:6px;">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>
+          Add a part
+        </button>
+      </div>
+
+      <div class="field">
+        <label>Bill (photo or PDF) — applies to this whole visit</label>
+        <div class="upload-zone" id="partUploadZone">
+          <input type="file" id="partFileInput" accept="image/*,application/pdf" multiple>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 16V4m0 0-4 4m4-4 4 4" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <p>Tap to add a photo or PDF</p>
+        </div>
+        <div class="doc-thumbs" id="partDocThumbs"></div>
+      </div>
+
+      <div style="display:flex; gap:10px;">
+        <button class="btn full" id="savePartBtn" style="margin-top:4px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span id="savePartBtnLabel">Save entry</span>
+        </button>
+        <button class="btn ghost" id="cancelPartEditBtn" style="display:none; margin-top:4px;">Cancel</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <p class="card-title">Km since last change</p>
+      <div class="entry-list" id="partLifeList"></div>
+    </div>
+
+    <div class="section-head" style="margin-top:24px;">
+      <h2>Recent part changes</h2>
+    </div>
+    <div class="entry-list" id="partList"></div>
+  </div>
+
+  <!-- Part name picker modal -->
+  <div class="modal-overlay" id="partNameModal">
+    <div class="modal">
+      <div class="modal-head">
+        <h3>Choose a part</h3>
+        <button id="closePartNameModal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      </div>
+      <div class="field">
+        <input type="text" id="partNameCustomInput" placeholder="Type a part name not in the list…">
+      </div>
+      <div class="dest-list" id="partNameList"></div>
+    </div>
+  </div>
+
+  <!-- ===================== PAGE 4: OVERVIEW ===================== -->
+  <div class="page" id="page-overview">
+    <div class="section-head">
+      <h2>Overview</h2>
+      <span class="hint">All pages, one view</span>
+    </div>
+
+    <div class="range-mode-tabs">
+      <div class="rmtab active" data-range="month">Monthly</div>
+      <div class="rmtab" data-range="year">Yearly</div>
+      <div class="rmtab" data-range="custom">Custom range</div>
+    </div>
+
+    <div class="month-switch" id="monthSwitchRow">
+      <button id="prevMonthBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <span class="label" id="monthLabel">—</span>
+      <button id="nextMonthBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    </div>
+
+    <div class="month-switch" id="yearSwitchRow" style="display:none;">
+      <button id="prevYearBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <span class="label" id="yearLabel">—</span>
+      <button id="nextYearBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    </div>
+
+    <div class="card" id="customRangeRow" style="display:none;">
+      <div class="date-range-row">
+        <input type="date" id="customRangeFrom">
+        <span class="to-sep">to</span>
+        <input type="date" id="customRangeTo">
+      </div>
+    </div>
+
+    <button class="btn full" id="downloadReportBtn" style="margin-bottom:16px;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15V3m0 12-4-4m4 4 4-4M4 17v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span id="downloadReportBtnLabel">Download report as PDF</span>
+    </button>
+
+    <div class="stat-grid">
+      <div class="stat-card income">
+        <p class="lbl">Total collection</p>
+        <p class="val" id="statCollection">₹0</p>
+      </div>
+      <div class="stat-card expense">
+        <p class="lbl">Total expenses</p>
+        <p class="val" id="statExpense">₹0</p>
+      </div>
+    </div>
+    <div class="stat-grid">
+      <div class="stat-card net">
+        <p class="lbl">Net profit</p>
+        <p class="val" id="statNet">₹0</p>
+      </div>
+      <div class="stat-card">
+        <p class="lbl">Km run</p>
+        <p class="val" id="statKm">0</p>
+      </div>
+    </div>
+    <div class="stat-grid wide" style="grid-template-columns:repeat(3,1fr);">
+      <div class="stat-card expense">
+        <p class="lbl">Fuel</p>
+        <p class="val" id="statFuelTotal">₹0</p>
+      </div>
+      <div class="stat-card expense">
+        <p class="lbl">Parts</p>
+        <p class="val" id="statPartsTotal">₹0</p>
+      </div>
+      <div class="stat-card expense">
+        <p class="lbl">Others</p>
+        <p class="val" id="statOthersTotal">₹0</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <p class="card-title">Expense &amp; collection breakdown</p>
+      <div id="breakdownPieWrap"></div>
+      <div class="legend" id="breakdownLegend"></div>
+    </div>
+
+    <div class="card">
+      <p class="card-title">Monthly comparison — collection vs fuel</p>
+      <div class="chart-range-row">
+        <label>From</label>
+        <input type="month" id="chartFromMonth">
+        <label>To</label>
+        <input type="month" id="chartToMonth">
+      </div>
+      <div id="comparisonChartWrap"></div>
+      <div class="legend" id="comparisonChartLegend"></div>
+    </div>
+
+    <div class="card">
+      <p class="card-title">Days visited — by destination</p>
+      <div class="dest-stat-list" id="destStatList"></div>
+    </div>
+
+    <div class="card">
+      <p class="card-title">Per-trip average</p>
+      <div class="grid2" style="margin-bottom:0;">
+        <div class="field" style="margin-bottom:0;">
+          <label>Avg collection / trip</label>
+          <input type="text" disabled id="avgCollection" style="font-family:var(--font-mono);">
+        </div>
+        <div class="field" style="margin-bottom:0;">
+          <label>Avg km / trip</label>
+          <input type="text" disabled id="avgKm" style="font-family:var(--font-mono);">
+        </div>
+      </div>
+    </div>
+
+    <div class="section-head" style="margin-top:8px;">
+      <h2>Trips &amp; income</h2>
+    </div>
+    <div class="entry-list" id="overviewDiaryList"></div>
+
+    <div class="section-head" style="margin-top:24px;">
+      <h2>Fuel entries</h2>
+    </div>
+    <div class="entry-list" id="overviewFuelList"></div>
+
+    <div class="section-head" style="margin-top:24px;">
+      <h2>Part changes</h2>
+    </div>
+    <div class="entry-list" id="overviewPartList"></div>
+  </div>
+
+</div>
+
+<!-- Document viewer modal -->
+<div class="modal-overlay" id="docModal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>Document</h3>
+      <button id="closeDocModal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    </div>
+    <div id="docModalBody"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* =====================================================================
+     CONFIG — fill in your own Google Cloud OAuth Client ID here
+     ===================================================================== */
+  var GOOGLE_CLIENT_ID = "433862928796-rjde3gd5ghu5vqhbl0d20amcantmauat.apps.googleusercontent.com";
+  var DRIVE_FILE_NAME = "riya-tours-logbook-data.json";
+  var DRIVE_SCOPE = "https://www.googleapis.com/auth/drive.file";
+
+  // Change this to whatever password you want visitors to enter before
+  // they even see the sign-in screen. This is a basic visibility curtain,
+  // not real security — your actual data stays protected by Google sign-in.
+  var ACCESS_PASSWORD = "riya2026";
+
+  /* ---------- Storage helpers ---------- */
+  var STORE_KEY = "logbook_v1_data";
+  var saveTimer = null;
+  var driveFileId = null;
+  var accessToken = null;
+  var tokenClient = null;
+  var driveReady = false;
+  var pendingDriveSave = false;
+
+  var DESTINATIONS = [
+    // Local & nearby
+    "Local", "Daily Based", "REST",
+    "Darjeeling", "Darjeeling Up-Down", "Kurseong", "Gangtok", "Gangtok Up-Down",
+    "Mirik", "Mirik-Pasupati", "Kalimpong", "Namchi", "Rangpo", "Raiganj", "Kishanganj",
+    "Islampur", "Coochbehar", "Dhupguri", "Falakata", "Malbazar", "Naxalbari",
+    // New additions
+    "Mangan", "Rongtong", "Phansidewa", "Fulbari", "Loop Bridge", "Kalijhora",
+    "Belacoba", "Madarihat", "Chisopani", "Kalchini", "Panighata", "Murti",
+    "Bidhannagar", "Gulma", "Ambari", "Maynaguri",
+    // Airport & station transfers
+    "Airport Drop", "Airport Pickup", "NJP Drop", "NJP Pickup",
+    // Border & Nepal
+    "Nepal Panitanki Border", "Kakarbhitta", "Nepal Galgalia Border",
+    // North Bengal & Dooars
+    "Rangapani", "Balurghat", "Gangarampur", "Jalpaiguri Drop", "Jalpaiguri UpDown",
+    "Haldibari", "Mathabhanga", "Dinhata", "Alipurduar", "Hasimara", "Jaigaon",
+    "Birpara", "Lataguri", "Gajoldoba", "Gorubathan", "Chalsa", "Rocky Island",
+    "Oodlabari", "Bengal Safari", "Buxa Forest", "Jayanti Forest",
+    // Bihar & beyond
+    "Purnia Drop", "Forbesganj Drop",
+    // Hill stations & viewpoints
+    "Lava", "Rishop", "Algarah", "Deolo", "Pedong", "Tinchuley",
+    "Peshok Tea Garden", "Lamahatta", "Takdah", "Lepcha Jagat",
+    "Simana View Point", "Dawaipani", "Jorethang", "Pelling",
+    // Sikkim
+    "Singtam", "Ranipool", "Majitar", "Panbu Dara View Point",
+    // Terai & Sevoke corridor
+    "Sevoke", "Rambi Bazar", "Rohini", "Dudhia", "Mangpoo", "Sittong", "DOW Hill",
+    // Teesta corridor & new
+    "Tista Bazar", "Kalijhora", "Loop Bridge", "Rongtong", "Mekliganj",
+    "Sonada", "Takdah",
+    // More North Bengal
+    "Changrabandha", "Tufanganj", "Jamaldah", "Jhalong Bindu", "Sitalkuchi",
+    "Bolpur", "Panighata",
+    // Assam
+    "Barpeta Assam", "Bongaigaon Assam",
+  ];
+
+  // Subset shown in the Overview "Days visited — by destination" card and in the PDF report.
+  // Anything outside this list (custom typed destinations, or others from the full picklist)
+  // simply won't appear in that particular summary, but is still saved and shown elsewhere.
+  var OVERVIEW_DESTINATIONS = [
+    "Local", "Darjeeling", "Darjeeling Up-Down", "Kurseong", "Gangtok", "Gangtok Up-Down",
+    "Mirik", "Kalimpong", "Namchi", "Rangpo"
+  ];
+
+  var PART_NAMES = [
+    "Engine Oil Change", "Coolant Oil Change", "Mobil Filter", "Diesel Filter", "AC Filter",
+    "Air Filter", "Oil Filter", "Oil Drain", "Battery", "Brake Oil", "Brake Pad", "Gear Oil",
+    "Clutch Plate/Pressure Plate", "Chain Timing", "AC Gas Change", "Release Bearing", "Tyre"
+  ];
+
+  // Parts tracked for "km since last change" (everything except Tyre, which is count-only)
+  var TRACKED_LIFE_PARTS = [
+    "Engine Oil Change", "Coolant Oil Change", "Mobil Filter", "Diesel Filter", "AC Filter",
+    "Air Filter", "Oil Filter", "Battery", "Brake Oil", "Brake Pad", "Gear Oil",
+    "Clutch Plate/Pressure Plate", "AC Gas Change"
+  ];
+
+  function loadData(){
+    try{
+      var raw = localStorage.getItem(STORE_KEY);
+      if(raw) return migrateData(JSON.parse(raw));
+    }catch(e){ console.error("load failed", e); }
+    return {
+      vehicleNumber:"",
+      darkMode:false,
+      diary:[],   // {id,dateFrom,dateTo,destination,collection,kmPrev,kmToday,kmRun,docs:[{name,type,data}]}
+      fuel:[],    // {id,date,amount,remarks,docs:[]}
+      parts:[]    // {id,date,km,items:[{name,amount}],docs:[]}
+    };
+  }
+
+  function migrateData(d){
+    if(!d) return d;
+    // migrate old single-date diary entries -> dateFrom/dateTo
+    if(d.diary){
+      d.diary.forEach(function(e){
+        if(!e.dateFrom){
+          e.dateFrom = e.date || e.dateFrom;
+          e.dateTo = e.date || e.dateTo;
+        }
+        if(!e.destinations){
+          var oldDest = (e.destination !== undefined ? e.destination : e.route) || "";
+          e.destinations = oldDest ? [oldDest] : [];
+        }
+      });
+    }
+    // migrate old single-part-per-entry -> items array
+    if(d.parts){
+      d.parts.forEach(function(e){
+        if(!e.items){
+          e.items = [{ name: e.name || "Part", amount: e.amount || 0 }];
+        }
+      });
+    }
+    // migrate old fuel entries (everything was fuel before; remarks become an optional note)
+    if(d.fuel){
+      d.fuel.forEach(function(e){
+        if(e.isFuel === undefined){
+          e.isFuel = true; // old entries were always fuel-only
+          e.otherDesc = e.remarks || "";
+        }
+      });
+    }
+    return d;
+  }
+
+  function destLabel(e){
+    var arr = e.destinations || (e.destination ? [e.destination] : []);
+    return arr.length ? arr.join(" + ") : "Trip";
+  }
+
+  var data = loadData();
+
+  function persist(){
+    showSaveIndicator("saving");
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(function(){
+      try{
+        localStorage.setItem(STORE_KEY, JSON.stringify(data));
+      }catch(e){
+        showToast("Local storage is full — try removing some large photos.");
+      }
+      saveToDrive();
+    }, 600);
+  }
+
+  function showSaveIndicator(state){
+    var el = document.getElementById("saveIndicator");
+    if(state === "saving"){
+      el.innerHTML = '<span class="dot syncing"></span><span>Syncing to Drive…</span>';
+    } else if(state === "saved"){
+      el.innerHTML = '<span class="dot"></span><span>Synced &middot; ' + nowISTTimeString() + '</span>';
+    } else if(state === "offline"){
+      el.innerHTML = '<span class="dot syncing"></span><span>Saved on this device &middot; not signed in</span>';
+    } else {
+      el.innerHTML = '<span class="dot error"></span><span>Sync failed — saved on device only</span>';
+    }
+  }
+
+  /* =====================================================================
+     GOOGLE SIGN-IN
+     ===================================================================== */
+  function initSignIn(){
+    if(GOOGLE_CLIENT_ID.indexOf("YOUR_CLIENT_ID") === 0){
+      document.getElementById("gateNote").textContent =
+        "Sign-in isn't configured yet — add your Google Client ID in the app file.";
+      return;
+    }
+    if(typeof google === "undefined" || !google.accounts){
+      setTimeout(initSignIn, 300);
+      return;
+    }
+    document.getElementById("gateNote").innerHTML =
+      "Your data is stored only in your own Google Drive. Riya Tours and Travels' logbook never sees your password.";
+
+    google.accounts.id.initialize({
+      client_id: GOOGLE_CLIENT_ID,
+      callback: function(){} // not used; we use the OAuth token flow below instead
+    });
+    google.accounts.id.renderButton(
+      document.getElementById("gsiButtonContainer"),
+      { theme:"outline", size:"large", text:"signin_with", shape:"pill" }
+    );
+
+    tokenClient = google.accounts.oauth2.initTokenClient({
+      client_id: GOOGLE_CLIENT_ID,
+      scope: DRIVE_SCOPE + " https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email",
+      callback: function(resp){
+        if(resp && resp.access_token){
+          accessToken = resp.access_token;
+          sessionStorage.setItem("gbook_token", accessToken);
+          onSignedIn();
+        }
+      }
+    });
+
+    // Replace the rendered GSI button with our own "continue" button that
+    // triggers the OAuth popup (GSI's One Tap button alone doesn't grant Drive scope).
+    var container = document.getElementById("gsiButtonContainer");
+    container.innerHTML = "";
+    var btn = document.createElement("button");
+    btn.className = "btn";
+    btn.style.fontSize = "14px";
+    btn.innerHTML = '<svg viewBox="0 0 24 24" width="16" height="16"><path fill="#fff" d="M21.8 12.2c0-.7-.1-1.4-.2-2H12v3.9h5.5c-.2 1.2-1 2.3-2.1 3v2.6h3.4c2-1.8 3-4.5 3-7.5z"/><path fill="#fff" d="M12 22c2.7 0 5-1 6.7-2.4l-3.4-2.6c-.9.6-2 1-3.3 1-2.6 0-4.8-1.7-5.6-4.1H3v2.7C4.7 19.9 8.1 22 12 22z"/><path fill="#fff" d="M6.4 13.9c-.2-.6-.3-1.2-.3-1.9s.1-1.3.3-1.9V7.4H3C2.4 8.7 2 10.3 2 12s.4 3.3 1 4.6l3.4-2.7z"/><path fill="#fff" d="M12 6.1c1.5 0 2.8.5 3.8 1.4l3-3C17 2.7 14.7 2 12 2 8.1 2 4.7 4.1 3 7.4l3.4 2.7c.8-2.4 3-4 5.6-4z"/></svg> Continue with Google';
+    btn.addEventListener("click", function(){
+      tokenClient.requestAccessToken({ prompt: accessToken ? "" : "consent" });
+    });
+    container.appendChild(btn);
+
+    // Try silent restore if we have a token from this session
+    var saved = sessionStorage.getItem("gbook_token");
+    if(saved){
+      accessToken = saved;
+      onSignedIn();
+    }
+  }
+
+  function onSignedIn(){
+    fetchProfile();
+    findOrCreateDriveFile(function(ok){
+      if(ok){
+        loadFromDrive(function(){
+          driveReady = true;
+          showApp();
+          showSaveIndicator("saved");
+        });
+      } else {
+        // token likely invalid/expired
+        signOut();
+        showToast("Sign-in expired. Please continue with Google again.");
+      }
+    });
+  }
+
+  function fetchProfile(){
+    fetch("https://www.googleapis.com/oauth2/v3/userinfo", {
+      headers:{ "Authorization":"Bearer " + accessToken }
+    }).then(function(r){ return r.json(); }).then(function(profile){
+      var label = document.getElementById("accountLabel");
+      var avatar = document.getElementById("accountAvatar");
+      if(profile.email) label.textContent = profile.email.split("@")[0];
+      if(profile.picture){ avatar.src = profile.picture; avatar.style.display = "block"; }
+      else { avatar.style.display = "none"; }
+    }).catch(function(){});
+  }
+
+  function showApp(){
+    document.getElementById("signinGate").style.display = "none";
+    document.getElementById("mainApp").style.display = "block";
+  }
+
+  function signOut(){
+    accessToken = null;
+    driveFileId = null;
+    driveReady = false;
+    sessionStorage.removeItem("gbook_token");
+    document.getElementById("mainApp").style.display = "none";
+    document.getElementById("signinGate").style.display = "flex";
+  }
+
+  document.getElementById("accountBadge").addEventListener("click", function(){
+    if(confirm("Sign out of Google? Your data stays safely in your Drive — you can sign in again anytime.")){
+      signOut();
+    }
+  });
+
+  /* =====================================================================
+     GOOGLE DRIVE READ/WRITE
+     Uses the drive.file scope: the app can only see files it created itself,
+     stored in a single JSON file in the user's Drive (not a visible folder
+     dump — it shows up in Drive under "logbook" file name).
+     ===================================================================== */
+  function driveHeaders(extra){
+    var h = { "Authorization":"Bearer " + accessToken };
+    if(extra) for(var k in extra) h[k] = extra[k];
+    return h;
+  }
+
+  function findOrCreateDriveFile(cb){
+    fetch("https://www.googleapis.com/drive/v3/files?q=" +
+      encodeURIComponent("name='" + DRIVE_FILE_NAME + "' and trashed=false") +
+      "&fields=files(id,name)", { headers: driveHeaders() })
+      .then(function(r){
+        if(r.status === 401){ cb(false); return null; }
+        return r.json();
+      })
+      .then(function(res){
+        if(!res) return;
+        if(res.files && res.files.length){
+          driveFileId = res.files[0].id;
+          cb(true);
+        } else {
+          // create a new empty file
+          var metadata = { name: DRIVE_FILE_NAME, mimeType:"application/json" };
+          fetch("https://www.googleapis.com/drive/v3/files", {
+            method:"POST",
+            headers: driveHeaders({ "Content-Type":"application/json" }),
+            body: JSON.stringify(metadata)
+          }).then(function(r2){ return r2.json(); })
+            .then(function(file){
+              driveFileId = file.id;
+              cb(true);
+            }).catch(function(){ cb(false); });
+        }
+      }).catch(function(){ cb(false); });
+  }
+
+  function loadFromDrive(cb){
+    if(!driveFileId){ cb(); return; }
+    fetch("https://www.googleapis.com/drive/v3/files/" + driveFileId + "?alt=media",
+      { headers: driveHeaders() })
+      .then(function(r){
+        if(r.status === 404 || r.status === 204) return null;
+        return r.text();
+      })
+      .then(function(text){
+        if(text){
+          try{
+            var remote = JSON.parse(text);
+            // Drive is the source of truth once signed in
+            data = migrateData(remote);
+            localStorage.setItem(STORE_KEY, JSON.stringify(data));
+            refreshAllViews();
+          }catch(e){ /* empty/corrupt file, keep local data and it'll be written on next save */ }
+        }
+        cb();
+      }).catch(function(){ cb(); });
+  }
+
+  function saveToDrive(){
+    if(!accessToken || !driveFileId){
+      showSaveIndicator("offline");
+      return;
+    }
+    fetch("https://www.googleapis.com/upload/drive/v3/files/" + driveFileId + "?uploadType=media", {
+      method:"PATCH",
+      headers: driveHeaders({ "Content-Type":"application/json" }),
+      body: JSON.stringify(data)
+    }).then(function(r){
+      if(r.ok){ showSaveIndicator("saved"); }
+      else { showSaveIndicator("error"); }
+    }).catch(function(){ showSaveIndicator("error"); });
+  }
+
+  function refreshAllViews(){
+    // Re-render every part of the UI from the (newly loaded) data object.
+    if(typeof recalcAllKmChain === "function"){
+      var beforeFix = JSON.stringify(data.diary);
+      recalcAllKmChain();
+      // If recalculating actually changed any stored kmPrev/kmRun values (e.g. old
+      // entries saved before this chain-recalculation logic existed), save the
+      // corrected numbers back to Drive once, so the fix is permanent rather than
+      // just a fresh display patch every time the app loads.
+      if(JSON.stringify(data.diary) !== beforeFix){
+        persist();
+      }
+    }
+    var vInput = document.getElementById("vehicleNumber");
+    if(vInput) vInput.value = data.vehicleNumber || "";
+    if(typeof updateKmReadout === "function") updateKmReadout();
+    if(typeof renderDiaryList === "function") renderDiaryList();
+    if(typeof renderFuelList === "function") renderFuelList();
+    if(typeof renderPartList === "function") renderPartList();
+    if(typeof renderPartLifeList === "function") renderPartLifeList();
+    if(typeof renderOverview === "function") renderOverview();
+    var odo = document.getElementById("currentOdoDisplay");
+    if(odo && typeof getLastKmReading === "function") odo.textContent = fmtKm(getLastKmReading());
+  }
+
+  function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+
+  function todayISO(){
+    // Always use Indian Standard Time (UTC+5:30), regardless of device timezone
+    var now = new Date();
+    var utcMs = now.getTime() + (now.getTimezoneOffset() * 60000);
+    var istMs = utcMs + (5.5 * 60 * 60000);
+    var ist = new Date(istMs);
+    var y = ist.getFullYear();
+    var m = String(ist.getMonth()+1).padStart(2,"0");
+    var d = String(ist.getDate()).padStart(2,"0");
+    return y + "-" + m + "-" + d;
+  }
+
+  function nowISTTimeString(){
+    var now = new Date();
+    var utcMs = now.getTime() + (now.getTimezoneOffset() * 60000);
+    var istMs = utcMs + (5.5 * 60 * 60000);
+    var ist = new Date(istMs);
+    var hh = ist.getHours();
+    var mm = String(ist.getMinutes()).padStart(2,"0");
+    var ampm = hh >= 12 ? "PM" : "AM";
+    var h12 = hh % 12; if(h12 === 0) h12 = 12;
+    return h12 + ":" + mm + " " + ampm + " IST";
+  }
+
+  function fmtMoney(n){
+    n = Math.round(Number(n)||0);
+    return "₹" + n.toLocaleString("en-IN");
+  }
+  function fmtKm(n){
+    n = Math.round(Number(n)||0);
+    return n.toLocaleString("en-IN");
+  }
+  function fmtDateShort(iso){
+    if(!iso) return "—";
+    var parts = iso.split("-");
+    var months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    return parts[2] + " " + months[parseInt(parts[1],10)-1];
+  }
+
+  function showToast(msg){
+    var t = document.getElementById("toast");
+    t.textContent = msg;
+    t.classList.add("show");
+    setTimeout(function(){ t.classList.remove("show"); }, 2400);
+  }
+
+  /* ---------- Image compression ---------- */
+  function fileToCompressedDataURL(file, cb){
+    if(file.type === "application/pdf"){
+      var reader = new FileReader();
+      reader.onload = function(){
+        cb({ name:file.name, type:"pdf", data:reader.result });
+      };
+      reader.readAsDataURL(file);
+      return;
+    }
+    var img = new Image();
+    var reader2 = new FileReader();
+    reader2.onload = function(){
+      img.onload = function(){
+        var maxDim = 1280;
+        var w = img.width, h = img.height;
+        if(w > h && w > maxDim){ h = Math.round(h * maxDim/w); w = maxDim; }
+        else if(h > maxDim){ w = Math.round(w * maxDim/h); h = maxDim; }
+        var canvas = document.createElement("canvas");
+        canvas.width = w; canvas.height = h;
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(img,0,0,w,h);
+        var dataUrl = canvas.toDataURL("image/jpeg", 0.7);
+        cb({ name:file.name, type:"image", data:dataUrl });
+      };
+      img.src = reader2.result;
+    };
+    reader2.readAsDataURL(file);
+  }
+
+  /* ---------- Generic upload zone wiring ---------- */
+  function wireUpload(zoneId, inputId, thumbsId, getDocsArr, setDocsArr){
+    var zone = document.getElementById(zoneId);
+    var input = document.getElementById(inputId);
+    zone.addEventListener("click", function(){ input.click(); });
+    input.addEventListener("change", function(){
+      var files = Array.prototype.slice.call(input.files);
+      var remaining = files.length;
+      if(!remaining) return;
+      files.forEach(function(file){
+        fileToCompressedDataURL(file, function(doc){
+          var arr = getDocsArr();
+          arr.push(doc);
+          setDocsArr(arr);
+          renderThumbs(thumbsId, getDocsArr(), setDocsArr);
+          remaining--;
+        });
+      });
+      input.value = "";
+    });
+  }
+
+  function renderThumbs(thumbsId, docs, setDocsArr){
+    var el = document.getElementById(thumbsId);
+    el.innerHTML = "";
+    docs.forEach(function(doc, idx){
+      var div = document.createElement("div");
+      div.className = "doc-thumb";
+      if(doc.type === "image"){
+        var img = document.createElement("img");
+        img.src = doc.data;
+        div.appendChild(img);
+      } else {
+        var span = document.createElement("span");
+        span.className = "pdf-icon";
+        span.textContent = "PDF";
+        div.appendChild(span);
+      }
+      div.addEventListener("click", function(e){
+        if(e.target.classList.contains("remove")) return;
+        openDocViewer(doc);
+      });
+      var rm = document.createElement("div");
+      rm.className = "remove";
+      rm.textContent = "×";
+      rm.addEventListener("click", function(e){
+        e.stopPropagation();
+        var arr = docs.slice();
+        arr.splice(idx,1);
+        setDocsArr(arr);
+        renderThumbs(thumbsId, arr, setDocsArr);
+      });
+      div.appendChild(rm);
+      el.appendChild(div);
+    });
+  }
+
+  function openDocViewer(doc){
+    var body = document.getElementById("docModalBody");
+    body.innerHTML = "";
+    if(doc.type === "image"){
+      var img = document.createElement("img");
+      img.className = "doc-viewer-img";
+      img.src = doc.data;
+      body.appendChild(img);
+    } else {
+      var p = document.createElement("p");
+      p.style.fontSize = "13px";
+      p.style.marginBottom = "12px";
+      p.textContent = doc.name || "Document.pdf";
+      body.appendChild(p);
+      var a = document.createElement("a");
+      a.href = doc.data;
+      a.download = doc.name || "document.pdf";
+      a.className = "btn full";
+      a.textContent = "Open / download PDF";
+      body.appendChild(a);
+    }
+    document.getElementById("docModal").classList.add("open");
+  }
+  document.getElementById("closeDocModal").addEventListener("click", function(){
+    document.getElementById("docModal").classList.remove("open");
+  });
+  document.getElementById("docModal").addEventListener("click", function(e){
+    if(e.target.id === "docModal") e.target.classList.remove("open");
+  });
+
+  /* ---------- Tabs ---------- */
+  var tabs = document.querySelectorAll(".tab");
+  tabs.forEach(function(tab){
+    tab.addEventListener("click", function(){
+      tabs.forEach(function(t){ t.classList.remove("active"); });
+      tab.classList.add("active");
+      document.querySelectorAll(".page").forEach(function(p){ p.classList.remove("active"); });
+      document.getElementById("page-" + tab.dataset.page).classList.add("active");
+      if(tab.dataset.page === "overview") renderOverview();
+    });
+  });
+
+  /* ---------- Vehicle number ---------- */
+  var vehicleInput = document.getElementById("vehicleNumber");
+  vehicleInput.value = data.vehicleNumber || "";
+  vehicleInput.addEventListener("input", function(){
+    data.vehicleNumber = vehicleInput.value.toUpperCase();
+    vehicleInput.value = data.vehicleNumber;
+    persist();
+  });
+
+  /* ---------- Dark mode (toggle removed; app stays in light mode) ---------- */
+  function applyMode(){
+    document.body.setAttribute("data-mode", data.darkMode ? "dark" : "light");
+  }
+  applyMode();
+
+  /* ---------- Export backup ---------- */
+  document.getElementById("exportBtn").addEventListener("click", function(){
+    var blob = new Blob([JSON.stringify(data, null, 2)], {type:"application/json"});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    var vn = (data.vehicleNumber || "logbook").replace(/\s+/g,"_");
+    a.download = vn + "_backup_" + todayISO() + ".json";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast("Backup file downloaded");
+  });
+
+  /* ====================================================================
+     PAGE 1: DAILY DIARY
+     ==================================================================== */
+  var diaryDocs = [];
+  var editingDiaryId = null;
+  var selectedDestinations = [];
+  document.getElementById("diaryDateFrom").value = todayISO();
+  document.getElementById("diaryDateTo").value = todayISO();
+
+  wireUpload("diaryUploadZone","diaryFileInput","diaryDocThumbs",
+    function(){ return diaryDocs; },
+    function(arr){ diaryDocs = arr; }
+  );
+
+  // Auto-fill "to" date with the same value whenever "from" changes — so a
+  // same-day trip only needs one date typed. For multi-day trips, just change
+  // the "to" field afterward to the actual end date.
+  document.getElementById("diaryDateFrom").addEventListener("change", function(){
+    var from = this.value;
+    var toInput = document.getElementById("diaryDateTo");
+    if(from){ toInput.value = from; }
+  });
+
+  /* ---------- Destination picker (multi-select) ---------- */
+  function destUsageCounts(){
+    var counts = {};
+    data.diary.forEach(function(e){
+      (e.destinations || (e.destination ? [e.destination] : [])).forEach(function(name){
+        if(name) counts[name] = (counts[name]||0) + 1;
+      });
+    });
+    return counts;
+  }
+
+  function renderDiaryDestChips(){
+    var wrap = document.getElementById("diaryDestChips");
+    wrap.innerHTML = "";
+    if(!selectedDestinations.length){
+      var empty = document.createElement("span");
+      empty.className = "dest-chip-empty";
+      empty.textContent = "No destination added yet — tap \"Add destination\" below.";
+      wrap.appendChild(empty);
+      return;
+    }
+    selectedDestinations.forEach(function(name, idx){
+      var chip = document.createElement("span");
+      chip.className = "dest-chip";
+      chip.innerHTML = name + '<span class="chip-remove">×</span>';
+      chip.querySelector(".chip-remove").addEventListener("click", function(){
+        selectedDestinations.splice(idx, 1);
+        renderDiaryDestChips();
+      });
+      wrap.appendChild(chip);
+    });
+  }
+
+  function buildDestList(query){
+    var modal = document.getElementById("destModal");
+    var listEl = document.getElementById("destList");
+    var counts = destUsageCounts();
+    var q = (query || "").trim().toLowerCase();
+    listEl.innerHTML = "";
+
+    var filtered = DESTINATIONS.filter(function(name){
+      return !q || name.toLowerCase().indexOf(q) !== -1;
+    });
+
+    // If the typed text doesn't exactly match any destination in the list,
+    // offer a "Use '[typed text]'" option at the top so it acts as free input.
+    if(q && DESTINATIONS.map(function(n){ return n.toLowerCase(); }).indexOf(q) === -1){
+      var useItem = document.createElement("div");
+      useItem.className = "dest-item";
+      useItem.style.fontStyle = "italic";
+      useItem.innerHTML = 'Use &ldquo;' + query.trim() + '&rdquo;';
+      useItem.addEventListener("click", function(){
+        var val = query.trim();
+        if(val && selectedDestinations.indexOf(val) === -1){
+          selectedDestinations.push(val);
+          renderDiaryDestChips();
+        }
+        modal.classList.remove("open");
+      });
+      listEl.appendChild(useItem);
+    }
+
+    if(!filtered.length && !q){
+      var empty = document.createElement("p");
+      empty.style.cssText = "font-size:12px;color:var(--ink-soft);padding:10px 0;margin:0;";
+      empty.textContent = "No destinations found.";
+      listEl.appendChild(empty);
+      return;
+    }
+
+    filtered.forEach(function(name){
+      var item = document.createElement("div");
+      item.className = "dest-item";
+      var c = counts[name] || 0;
+      var already = selectedDestinations.indexOf(name) !== -1;
+      item.innerHTML = (already ? "✓ " : "") + name + (c ? '<span class="count-tag">' + c + ' trip' + (c>1?'s':'') + '</span>' : '');
+      if(already) item.style.opacity = "0.55";
+      item.addEventListener("click", function(){
+        if(selectedDestinations.indexOf(name) === -1){
+          selectedDestinations.push(name);
+          renderDiaryDestChips();
+        }
+        modal.classList.remove("open");
+      });
+      listEl.appendChild(item);
+    });
+  }
+
+  function openDestModal(){
+    var modal = document.getElementById("destModal");
+    var input = document.getElementById("destCustomInput");
+    input.value = "";
+    buildDestList("");
+    modal.classList.add("open");
+    setTimeout(function(){ input.focus(); }, 80);
+  }
+
+  document.getElementById("addDestBtn").addEventListener("click", openDestModal);
+  document.getElementById("closeDestModal").addEventListener("click", function(){
+    document.getElementById("destModal").classList.remove("open");
+  });
+  document.getElementById("destModal").addEventListener("click", function(e){
+    if(e.target.id === "destModal") e.target.classList.remove("open");
+  });
+  document.getElementById("destCustomInput").addEventListener("input", function(){
+    buildDestList(this.value);
+  });
+  document.getElementById("destCustomInput").addEventListener("keydown", function(e){
+    if(e.key === "Enter"){
+      var val = this.value.trim();
+      if(val && selectedDestinations.indexOf(val) === -1){
+        selectedDestinations.push(val);
+        renderDiaryDestChips();
+        document.getElementById("destModal").classList.remove("open");
+      }
+    }
+  });
+
+  // Sorts all diary entries chronologically (by trip start date, then end date,
+  // then a stable tiebreaker) and recalculates kmPrev/kmRun for every entry
+  // based on the entry immediately before it BY DATE — not by when it was saved.
+  // This is what correctly handles backfilling old entries out of order: if you
+  // add 24/06 after already having 25/06 and 23/06 saved, this re-chains all three.
+  function recalcAllKmChain(){
+    var sorted = data.diary.slice().sort(function(a,b){
+      return a.dateFrom.localeCompare(b.dateFrom) || (a.dateTo||a.dateFrom).localeCompare(b.dateTo||b.dateFrom) || a.id.localeCompare(b.id);
+    });
+    var runningPrev = 0;
+    sorted.forEach(function(entry){
+      entry.kmPrev = runningPrev;
+      entry.kmRun = runningPrev ? (entry.kmToday - runningPrev) : 0;
+      runningPrev = entry.kmToday || runningPrev;
+    });
+  }
+
+  // Returns the km reading of the entry immediately before the given date
+  // (the closest earlier date, skipping any gaps), excluding one entry id if given.
+  function getKmReadingBeforeDate(dateStr, excludeId){
+    var candidates = data.diary.filter(function(e){
+      if(excludeId && e.id === excludeId) return false;
+      return (e.dateTo||e.dateFrom) < dateStr;
+    });
+    if(!candidates.length) return 0;
+    candidates.sort(function(a,b){ return (a.dateTo||a.dateFrom).localeCompare(b.dateTo||b.dateFrom) || a.id.localeCompare(b.id); });
+    return candidates[candidates.length-1].kmToday || 0;
+  }
+
+  // "Current odometer" = the closing reading of whichever entry is chronologically last
+  function getLastKmReading(){
+    var sorted = data.diary.slice().sort(function(a,b){
+      return (a.dateTo||a.dateFrom).localeCompare(b.dateTo||b.dateFrom) || a.id.localeCompare(b.id);
+    });
+    if(!sorted.length) return 0;
+    return sorted[sorted.length-1].kmToday || 0;
+  }
+
+  function updateKmReadout(){
+    var dateForCalc = document.getElementById("diaryDateFrom").value || todayISO();
+    var prev = getKmReadingBeforeDate(dateForCalc, editingDiaryId);
+    var todayVal = parseFloat(document.getElementById("diaryKmToday").value) || 0;
+    document.getElementById("kmPrevDisplay").textContent = prev ? fmtKm(prev) : "—";
+    document.getElementById("kmTodayDisplay").textContent = todayVal ? fmtKm(todayVal) : "—";
+    var run = todayVal && prev ? (todayVal - prev) : (todayVal && !prev ? todayVal : null);
+    var resultEl = document.getElementById("kmRunDisplay");
+    if(run === null){
+      resultEl.textContent = "—";
+    } else if(run < 0){
+      resultEl.textContent = "⚠";
+      resultEl.title = "This reading is lower than the previous reading";
+    } else {
+      resultEl.textContent = fmtKm(run);
+    }
+  }
+  document.getElementById("diaryKmToday").addEventListener("input", updateKmReadout);
+  document.getElementById("diaryDateFrom").addEventListener("change", updateKmReadout);
+
+  document.getElementById("currentOdoDisplay").textContent = fmtKm(getLastKmReading());
+
+  function resetDiaryForm(resetDates){
+    editingDiaryId = null;
+    selectedDestinations = [];
+    // Only reset dates when explicitly requested (cancel/initial load).
+    // After a normal save, dates stay at whatever the user had so they can
+    // quickly enter the next day's data without retyping the date.
+    if(resetDates){
+      document.getElementById("diaryDateFrom").value = todayISO();
+      document.getElementById("diaryDateTo").value = todayISO();
+    }
+    renderDiaryDestChips();
+    document.getElementById("diaryCollection").value = "";
+    document.getElementById("diaryKmToday").value = "";
+    diaryDocs = [];
+    renderThumbs("diaryDocThumbs", [], function(){});
+    document.getElementById("saveDiaryBtnLabel").textContent = "Save entry";
+    document.getElementById("cancelDiaryEditBtn").style.display = "none";
+    updateKmReadout();
+  }
+
+  document.getElementById("diaryTodayBtn").addEventListener("click", function(){
+    document.getElementById("diaryDateFrom").value = todayISO();
+    document.getElementById("diaryDateTo").value = todayISO();
+    updateKmReadout();
+  });
+
+  function startEditDiary(id){
+    var entry = data.diary.find(function(e){ return e.id === id; });
+    if(!entry) return;
+    editingDiaryId = id;
+    selectedDestinations = (entry.destinations || (entry.destination ? [entry.destination] : [])).slice();
+    document.getElementById("diaryDateFrom").value = entry.dateFrom;
+    document.getElementById("diaryDateTo").value = entry.dateTo;
+    renderDiaryDestChips();
+    document.getElementById("diaryCollection").value = entry.collection || "";
+    document.getElementById("diaryKmToday").value = entry.kmToday || "";
+    diaryDocs = (entry.docs || []).slice();
+    renderThumbs("diaryDocThumbs", diaryDocs, function(arr){ diaryDocs = arr; });
+    document.getElementById("saveDiaryBtnLabel").textContent = "Update entry";
+    document.getElementById("cancelDiaryEditBtn").style.display = "inline-flex";
+    updateKmReadout();
+    document.getElementById("page-diary").scrollIntoView({behavior:"smooth", block:"start"});
+  }
+
+  document.getElementById("cancelDiaryEditBtn").addEventListener("click", function(){ resetDiaryForm(true); });
+
+  document.getElementById("saveDiaryBtn").addEventListener("click", function(){
+    var dateFrom = document.getElementById("diaryDateFrom").value;
+    var dateTo = document.getElementById("diaryDateTo").value || dateFrom;
+    var destinations = selectedDestinations.slice();
+    var collection = parseFloat(document.getElementById("diaryCollection").value) || 0;
+    var kmToday = parseFloat(document.getElementById("diaryKmToday").value) || 0;
+
+    if(!dateFrom){ showToast("Pick a start date first"); return; }
+    if(!kmToday){ showToast("Enter the closing km reading"); return; }
+    if(dateTo < dateFrom){ showToast("End date can't be before the start date"); return; }
+
+    if(editingDiaryId){
+      var entry = data.diary.find(function(e){ return e.id === editingDiaryId; });
+      entry.dateFrom = dateFrom;
+      entry.dateTo = dateTo;
+      entry.destinations = destinations;
+      delete entry.destination;
+      entry.collection = collection;
+      entry.kmToday = kmToday;
+      entry.docs = diaryDocs;
+      showToast("Diary entry updated");
+    } else {
+      data.diary.push({
+        id: uid(), dateFrom: dateFrom, dateTo: dateTo, destinations: destinations,
+        collection: collection, kmPrev: 0, kmToday: kmToday, kmRun: 0, docs: diaryDocs
+      });
+      showToast("Diary entry saved");
+    }
+    recalcAllKmChain();
+    persist();
+    var wasEditing = !!editingDiaryId;
+    // After editing an existing entry, reset dates to today for fresh input.
+    // After a new save, keep the current date so the user can immediately
+    // enter the next trip on that same day without retyping the date.
+    resetDiaryForm(wasEditing);
+    document.getElementById("currentOdoDisplay").textContent = fmtKm(getLastKmReading());
+    renderDiaryList();
+  });
+
+  function deleteDiaryEntry(id){
+    data.diary = data.diary.filter(function(e){ return e.id !== id; });
+    recalcAllKmChain();
+    persist();
+    renderDiaryList();
+    document.getElementById("currentOdoDisplay").textContent = fmtKm(getLastKmReading());
+    updateKmReadout();
+  }
+
+  function fmtDateRangeShort(e){
+    if(e.dateFrom === e.dateTo) return fmtDateShort(e.dateFrom);
+    return fmtDateShort(e.dateFrom) + " – " + fmtDateShort(e.dateTo);
+  }
+
+  function tripDayCount(e){
+    var from = new Date(e.dateFrom), to = new Date(e.dateTo||e.dateFrom);
+    var days = Math.round((to - from) / 86400000) + 1;
+    return days > 0 ? days : 1;
+  }
+
+  function renderDiaryList(){
+    var list = document.getElementById("diaryList");
+    var sorted = data.diary.slice().sort(function(a,b){ return (b.dateTo||b.dateFrom).localeCompare(a.dateTo||a.dateFrom); }).slice(0,30);
+    if(!sorted.length){
+      list.innerHTML = '<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg><p>No diary entries yet. Add your first trip above.</p></div>';
+      return;
+    }
+    list.innerHTML = "";
+    sorted.forEach(function(e){
+      var row = document.createElement("div");
+      row.className = "entry-row";
+      var days = tripDayCount(e);
+      row.innerHTML =
+        '<div class="date-chip">' + fmtDateRangeShort(e) + '</div>' +
+        '<div class="main">' +
+          '<p class="title">' + destLabel(e) + (days>1 ? ' · ' + days + ' days' : '') + '</p>' +
+          '<p class="sub">' + fmtKm(e.kmRun) + ' km run · ' + fmtKm(e.kmPrev) + ' → ' + fmtKm(e.kmToday) + '</p>' +
+        '</div>' +
+        '<div class="amt income">' + fmtMoney(e.collection) + '</div>' +
+        '<div class="row-actions">' +
+          (e.docs && e.docs.length ? '<button class="view-doc" title="View documents"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></button>' : '') +
+          '<button class="edit-entry" title="Edit"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5Z"/></svg></button>' +
+          '<button class="del-entry" title="Delete"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2m2 0v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V6"/></svg></button>' +
+        '</div>';
+      row.querySelector(".edit-entry").addEventListener("click", function(){ startEditDiary(e.id); });
+      row.querySelector(".del-entry").addEventListener("click", function(){
+        if(confirm("Delete this diary entry?")) deleteDiaryEntry(e.id);
+      });
+      var viewBtn = row.querySelector(".view-doc");
+      if(viewBtn){
+        viewBtn.addEventListener("click", function(){ openDocViewer(e.docs[0]); });
+      }
+      list.appendChild(row);
+    });
+  }
+
+  recalcAllKmChain(); // fixes display immediately using local cache; Drive sync (if signed in) will re-run this with authoritative data
+  renderDiaryDestChips();
+  updateKmReadout();
+  renderDiaryList();
+
+  /* ====================================================================
+     PAGE 2: EXPENSES LOG (fuel + other expenses like toll, permit)
+     ==================================================================== */
+  var fuelDocs = [];
+  var editingFuelId = null;
+  document.getElementById("fuelDate").value = todayISO();
+
+  wireUpload("fuelUploadZone","fuelFileInput","fuelDocThumbs",
+    function(){ return fuelDocs; },
+    function(arr){ fuelDocs = arr; }
+  );
+
+  // The 6 checkbox IDs and their display labels
+  var EXPENSE_OPTIONS = [
+    { id:"chkFuelDiesel", label:"Fuel — Diesel", isFuel:true },
+    { id:"chkToll",       label:"Toll",          isFuel:false },
+    { id:"chkPermit",     label:"Permit",        isFuel:false },
+    { id:"chkParking",    label:"Parking",       isFuel:false },
+    { id:"chkCommission", label:"Commission",    isFuel:false },
+    { id:"chkYearlyDocs", label:"Yearly Docs Maintenance", isFuel:false }
+  ];
+
+  // An entry is Fuel if Fuel-Diesel was ticked (selectedOptions includes it, or legacy isFuel=true)
+  function fuelEntryCategory(e){
+    if(e.selectedOptions){
+      return e.selectedOptions.indexOf("Fuel — Diesel") !== -1 ? "fuel" : "others";
+    }
+    if(e.isFuel !== undefined) return e.isFuel ? "fuel" : "others";
+    return "others";
+  }
+  function fuelEntryLabel(e){
+    if(e.selectedOptions){
+      var parts = e.selectedOptions.slice();
+      if(e.otherDesc) parts.push(e.otherDesc);
+      return parts.length ? parts.join(" + ") : "Expense";
+    }
+    if(e.isFuel !== undefined){
+      var parts2 = [];
+      if(e.isFuel) parts2.push("Fuel — Diesel");
+      if(e.otherDesc) parts2.push(e.otherDesc);
+      return parts2.length ? parts2.join(" + ") : "Expense";
+    }
+    return e.remarks || "Expense";
+  }
+
+  function getFuelFormOptions(){
+    return EXPENSE_OPTIONS.filter(function(o){
+      return document.getElementById(o.id).checked;
+    }).map(function(o){ return o.label; });
+  }
+
+  function setFuelFormOptions(selectedOptions){
+    EXPENSE_OPTIONS.forEach(function(o){
+      var el = document.getElementById(o.id);
+      if(el) el.checked = selectedOptions && selectedOptions.indexOf(o.label) !== -1;
+    });
+  }
+
+  function resetFuelForm(resetDate){
+    editingFuelId = null;
+    if(resetDate) document.getElementById("fuelDate").value = todayISO();
+    document.getElementById("fuelAmount").value = "";
+    setFuelFormOptions([]);
+    document.getElementById("fuelOtherDesc").value = "";
+    fuelDocs = [];
+    renderThumbs("fuelDocThumbs", [], function(){});
+    document.getElementById("saveFuelBtnLabel").textContent = "Save entry";
+    document.getElementById("cancelFuelEditBtn").style.display = "none";
+  }
+
+  function startEditFuel(id){
+    var entry = data.fuel.find(function(e){ return e.id === id; });
+    if(!entry) return;
+    editingFuelId = id;
+    document.getElementById("fuelDate").value = entry.date;
+    document.getElementById("fuelAmount").value = entry.amount || "";
+    // Support both new selectedOptions and legacy isFuel
+    if(entry.selectedOptions){
+      setFuelFormOptions(entry.selectedOptions);
+    } else {
+      setFuelFormOptions(entry.isFuel ? ["Fuel — Diesel"] : []);
+    }
+    document.getElementById("fuelOtherDesc").value = entry.otherDesc || "";
+    fuelDocs = (entry.docs || []).slice();
+    renderThumbs("fuelDocThumbs", fuelDocs, function(arr){ fuelDocs = arr; });
+    document.getElementById("saveFuelBtnLabel").textContent = "Update entry";
+    document.getElementById("cancelFuelEditBtn").style.display = "inline-flex";
+    document.getElementById("page-fuel").scrollIntoView({behavior:"smooth", block:"start"});
+  }
+  document.getElementById("cancelFuelEditBtn").addEventListener("click", function(){ resetFuelForm(true); });
+
+  document.getElementById("saveFuelBtn").addEventListener("click", function(){
+    var date = document.getElementById("fuelDate").value;
+    var amount = parseFloat(document.getElementById("fuelAmount").value) || 0;
+    var selectedOptions = getFuelFormOptions();
+    var otherDesc = document.getElementById("fuelOtherDesc").value.trim();
+    var isFuel = selectedOptions.indexOf("Fuel — Diesel") !== -1;
+
+    if(!date){ showToast("Pick a date first"); return; }
+    if(!amount){ showToast("Enter the amount"); return; }
+    if(!selectedOptions.length && !otherDesc){ showToast("Tick at least one expense type or add a note"); return; }
+
+    var wasEditing = !!editingFuelId;
+    if(editingFuelId){
+      var entry = data.fuel.find(function(e){ return e.id === editingFuelId; });
+      entry.date = date; entry.amount = amount;
+      entry.selectedOptions = selectedOptions; entry.isFuel = isFuel; entry.otherDesc = otherDesc;
+      delete entry.remarks;
+      entry.docs = fuelDocs;
+      showToast("Expense entry updated");
+    } else {
+      data.fuel.push({ id:uid(), date:date, amount:amount, selectedOptions:selectedOptions, isFuel:isFuel, otherDesc:otherDesc, docs:fuelDocs });
+      showToast("Expense entry saved");
+    }
+    persist();
+    resetFuelForm(wasEditing); // reset date only after an edit, keep it after new save
+    renderFuelList();
+  });
+
+  function deleteFuelEntry(id){
+    data.fuel = data.fuel.filter(function(e){ return e.id !== id; });
+    persist();
+    renderFuelList();
+  }
+
+  function renderFuelList(){
+    var list = document.getElementById("fuelList");
+    var sorted = data.fuel.slice().sort(function(a,b){ return b.date.localeCompare(a.date); }).slice(0,30);
+    if(!sorted.length){
+      list.innerHTML = '<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 22h12M5 22V8l5-4 5 4v14"/></svg><p>No expense entries yet.</p></div>';
+      return;
+    }
+    list.innerHTML = "";
+    sorted.forEach(function(e){
+      var row = document.createElement("div");
+      row.className = "entry-row";
+      var category = fuelEntryCategory(e);
+      row.innerHTML =
+        '<div class="date-chip">' + fmtDateShort(e.date) + '</div>' +
+        '<div class="main">' +
+          '<p class="title">' + fuelEntryLabel(e) + '</p>' +
+          '<p class="sub">' + (category === "fuel" ? "Fuel expense" : "Other expense") + '</p>' +
+        '</div>' +
+        '<div class="amt expense">' + fmtMoney(e.amount) + '</div>' +
+        '<div class="row-actions">' +
+          (e.docs && e.docs.length ? '<button class="view-doc" title="View bill"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></button>' : '') +
+          '<button class="edit-entry" title="Edit"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5Z"/></svg></button>' +
+          '<button class="del-entry" title="Delete"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2m2 0v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V6"/></svg></button>' +
+        '</div>';
+      row.querySelector(".edit-entry").addEventListener("click", function(){ startEditFuel(e.id); });
+      row.querySelector(".del-entry").addEventListener("click", function(){
+        if(confirm("Delete this expense entry?")) deleteFuelEntry(e.id);
+      });
+      var viewBtn = row.querySelector(".view-doc");
+      if(viewBtn){
+        viewBtn.addEventListener("click", function(){ openDocViewer(e.docs[0]); });
+      }
+      list.appendChild(row);
+    });
+  }
+  renderFuelList();
+
+  /* ====================================================================
+     PAGE 3: PARTS / MAINTENANCE
+     ==================================================================== */
+  var partDocs = [];
+  var editingPartId = null;
+  var currentPartItems = []; // [{name, amount}]
+  var partItemPickerTargetIndex = null; // which row's name field opened the picker (null = adding new row)
+
+  document.getElementById("partDate").value = todayISO();
+
+  wireUpload("partUploadZone","partFileInput","partDocThumbs",
+    function(){ return partDocs; },
+    function(arr){ partDocs = arr; }
+  );
+
+  function renderPartItemsForm(){
+    var wrap = document.getElementById("partItemsList");
+    wrap.innerHTML = "";
+    if(!currentPartItems.length){
+      var empty = document.createElement("p");
+      empty.style.fontSize = "12px";
+      empty.style.color = "var(--ink-soft)";
+      empty.textContent = "No parts added yet — tap \"Add a part\" below.";
+      wrap.appendChild(empty);
+      return;
+    }
+    currentPartItems.forEach(function(item, idx){
+      var row = document.createElement("div");
+      row.className = "part-item-row";
+      row.innerHTML =
+        '<span class="pname">' + (item.name || "Choose part…") + '</span>' +
+        '<span class="pamt"><input type="number" inputmode="decimal" placeholder="₹ amount" value="' + (item.amount || "") + '"></span>' +
+        '<span class="premove"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></span>';
+      row.querySelector(".pname").addEventListener("click", function(){
+        openPartNameModal(idx);
+      });
+      row.querySelector(".pamt input").addEventListener("input", function(){
+        currentPartItems[idx].amount = parseFloat(this.value) || 0;
+      });
+      row.querySelector(".premove").addEventListener("click", function(){
+        currentPartItems.splice(idx,1);
+        renderPartItemsForm();
+      });
+      wrap.appendChild(row);
+    });
+  }
+
+  document.getElementById("addPartItemBtn").addEventListener("click", function(){
+    currentPartItems.push({ name:"", amount:0 });
+    renderPartItemsForm();
+    openPartNameModal(currentPartItems.length - 1);
+  });
+
+  function partUsageInfo(){
+    // returns { name: { lastKm, lastDate, count } } across all saved parts entries
+    var info = {};
+    data.parts.forEach(function(e){
+      (e.items||[]).forEach(function(it){
+        if(!it.name) return;
+        if(!info[it.name]) info[it.name] = { lastKm:0, lastDate:"", count:0 };
+        info[it.name].count++;
+        if(!info[it.name].lastDate || e.date > info[it.name].lastDate){
+          info[it.name].lastDate = e.date;
+          info[it.name].lastKm = e.km;
+        }
+      });
+    });
+    return info;
+  }
+
+  function openPartNameModal(targetIndex){
+    partItemPickerTargetIndex = targetIndex;
+    var modal = document.getElementById("partNameModal");
+    var listEl = document.getElementById("partNameList");
+    var usage = partUsageInfo();
+    listEl.innerHTML = "";
+    PART_NAMES.forEach(function(name){
+      var item = document.createElement("div");
+      item.className = "dest-item";
+      var u = usage[name];
+      item.innerHTML = name + (u ? '<span class="count-tag">last at ' + fmtKm(u.lastKm) + ' km</span>' : '');
+      item.addEventListener("click", function(){
+        currentPartItems[partItemPickerTargetIndex].name = name;
+        renderPartItemsForm();
+        modal.classList.remove("open");
+      });
+      listEl.appendChild(item);
+    });
+    document.getElementById("partNameCustomInput").value = "";
+    modal.classList.add("open");
+  }
+  document.getElementById("closePartNameModal").addEventListener("click", function(){
+    document.getElementById("partNameModal").classList.remove("open");
+  });
+  document.getElementById("partNameModal").addEventListener("click", function(e){
+    if(e.target.id === "partNameModal") e.target.classList.remove("open");
+  });
+  document.getElementById("partNameCustomInput").addEventListener("keydown", function(e){
+    if(e.key === "Enter"){
+      var val = this.value.trim();
+      if(val){
+        currentPartItems[partItemPickerTargetIndex].name = val;
+        renderPartItemsForm();
+        document.getElementById("partNameModal").classList.remove("open");
+      }
+    }
+  });
+
+  function resetPartForm(resetDate){
+    editingPartId = null;
+    if(resetDate) document.getElementById("partDate").value = todayISO();
+    document.getElementById("partKm").value = "";
+    currentPartItems = [];
+    renderPartItemsForm();
+    partDocs = [];
+    renderThumbs("partDocThumbs", [], function(){});
+    document.getElementById("savePartBtnLabel").textContent = "Save entry";
+    document.getElementById("cancelPartEditBtn").style.display = "none";
+  }
+
+  function startEditPart(id){
+    var entry = data.parts.find(function(e){ return e.id === id; });
+    if(!entry) return;
+    editingPartId = id;
+    document.getElementById("partDate").value = entry.date;
+    document.getElementById("partKm").value = entry.km || "";
+    currentPartItems = (entry.items || []).map(function(it){ return { name:it.name, amount:it.amount }; });
+    renderPartItemsForm();
+    partDocs = (entry.docs || []).slice();
+    renderThumbs("partDocThumbs", partDocs, function(arr){ partDocs = arr; });
+    document.getElementById("savePartBtnLabel").textContent = "Update entry";
+    document.getElementById("cancelPartEditBtn").style.display = "inline-flex";
+    document.getElementById("page-parts").scrollIntoView({behavior:"smooth", block:"start"});
+  }
+  document.getElementById("cancelPartEditBtn").addEventListener("click", function(){ resetPartForm(true); });
+
+  document.getElementById("savePartBtn").addEventListener("click", function(){
+    var date = document.getElementById("partDate").value;
+    var km = parseFloat(document.getElementById("partKm").value) || 0;
+    var items = currentPartItems.filter(function(it){ return it.name; });
+
+    if(!date){ showToast("Pick a date first"); return; }
+    if(!km){ showToast("Enter the km reading"); return; }
+    if(!items.length){ showToast("Add at least one part"); return; }
+
+    var wasEditing = !!editingPartId;
+    if(editingPartId){
+      var entry = data.parts.find(function(e){ return e.id === editingPartId; });
+      entry.date = date; entry.km = km; entry.items = items; entry.docs = partDocs;
+      showToast("Part entry updated");
+    } else {
+      data.parts.push({ id: uid(), date:date, km:km, items:items, docs:partDocs });
+      showToast("Part change saved");
+    }
+    persist();
+    resetPartForm(wasEditing);
+    renderPartList();
+    renderPartLifeList();
+  });
+
+  function deletePartEntry(id){
+    data.parts = data.parts.filter(function(e){ return e.id !== id; });
+    persist();
+    renderPartList();
+    renderPartLifeList();
+  }
+
+  function partsEntryAmountTotal(e){
+    return (e.items||[]).reduce(function(s,it){ return s + (it.amount||0); }, 0);
+  }
+  function partsEntryNamesLabel(e){
+    return (e.items||[]).map(function(it){ return it.name; }).join(", ");
+  }
+
+  function renderPartList(){
+    var list = document.getElementById("partList");
+    var sorted = data.parts.slice().sort(function(a,b){ return b.date.localeCompare(a.date); }).slice(0,30);
+    if(!sorted.length){
+      list.innerHTML = '<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/></svg><p>No part changes logged yet.</p></div>';
+      return;
+    }
+    list.innerHTML = "";
+    sorted.forEach(function(e){
+      var row = document.createElement("div");
+      row.className = "entry-row";
+      row.innerHTML =
+        '<div class="date-chip">' + fmtDateShort(e.date) + '</div>' +
+        '<div class="main">' +
+          '<p class="title">' + partsEntryNamesLabel(e) + '</p>' +
+          '<p class="sub">At ' + fmtKm(e.km) + ' km</p>' +
+        '</div>' +
+        '<div class="amt expense">' + fmtMoney(partsEntryAmountTotal(e)) + '</div>' +
+        '<div class="row-actions">' +
+          (e.docs && e.docs.length ? '<button class="view-doc" title="View bill"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></button>' : '') +
+          '<button class="edit-entry" title="Edit"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5Z"/></svg></button>' +
+          '<button class="del-entry" title="Delete"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2m2 0v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V6"/></svg></button>' +
+        '</div>';
+      row.querySelector(".edit-entry").addEventListener("click", function(){ startEditPart(e.id); });
+      row.querySelector(".del-entry").addEventListener("click", function(){
+        if(confirm("Delete this part entry?")) deletePartEntry(e.id);
+      });
+      var viewBtn = row.querySelector(".view-doc");
+      if(viewBtn){
+        viewBtn.addEventListener("click", function(){ openDocViewer(e.docs[0]); });
+      }
+      list.appendChild(row);
+    });
+  }
+
+  function renderPartLifeList(){
+    var list = document.getElementById("partLifeList");
+    var usage = partUsageInfo();
+    var currentKm = getLastKmReading();
+    list.innerHTML = "";
+
+    TRACKED_LIFE_PARTS.forEach(function(name){
+      var u = usage[name];
+      var row = document.createElement("div");
+      row.className = "life-row";
+      if(!u){
+        row.innerHTML =
+          '<div><div class="pname">' + name + '</div><div class="pmeta">Not changed yet</div></div>' +
+          '<div class="pkm">—</div>';
+      } else {
+        var since = currentKm - u.lastKm;
+        var warn = since > 8000; // simple heuristic flag for "due soon / overdue"
+        row.innerHTML =
+          '<div><div class="pname">' + name + '</div><div class="pmeta">Last at ' + fmtKm(u.lastKm) + ' km · ' + fmtDateShort(u.lastDate) + '</div></div>' +
+          '<div class="pkm' + (warn ? ' warn' : '') + '">' + fmtKm(since) + ' km ago</div>';
+      }
+      list.appendChild(row);
+    });
+
+    // Tyre: count-only row
+    var tyreRow = document.createElement("div");
+    tyreRow.className = "life-row";
+    var tyreCount = usage["Tyre"] ? usage["Tyre"].count : 0;
+    tyreRow.innerHTML =
+      '<div><div class="pname">Tyre</div><div class="pmeta">Counted by number of changes, not km</div></div>' +
+      '<div class="pkm">' + tyreCount + ' changed</div>';
+    list.appendChild(tyreRow);
+  }
+
+  renderPartItemsForm();
+  renderPartList();
+  renderPartLifeList();
+
+  /* ====================================================================
+     PAGE 4: OVERVIEW
+     ==================================================================== */
+  var overviewRangeMode = "month"; // "month" | "year" | "custom"
+  var overviewMonth = new Date(); overviewMonth.setDate(1);
+  var overviewYear = new Date().getFullYear();
+
+  document.querySelectorAll(".rmtab").forEach(function(tab){
+    tab.addEventListener("click", function(){
+      document.querySelectorAll(".rmtab").forEach(function(t){ t.classList.remove("active"); });
+      tab.classList.add("active");
+      overviewRangeMode = tab.dataset.range;
+      document.getElementById("monthSwitchRow").style.display = (overviewRangeMode === "month") ? "flex" : "none";
+      document.getElementById("yearSwitchRow").style.display = (overviewRangeMode === "year") ? "flex" : "none";
+      document.getElementById("customRangeRow").style.display = (overviewRangeMode === "custom") ? "block" : "none";
+      renderOverview();
+    });
+  });
+
+  document.getElementById("prevMonthBtn").addEventListener("click", function(){
+    overviewMonth.setMonth(overviewMonth.getMonth()-1);
+    renderOverview();
+  });
+  document.getElementById("nextMonthBtn").addEventListener("click", function(){
+    overviewMonth.setMonth(overviewMonth.getMonth()+1);
+    renderOverview();
+  });
+  document.getElementById("prevYearBtn").addEventListener("click", function(){
+    overviewYear--; renderOverview();
+  });
+  document.getElementById("nextYearBtn").addEventListener("click", function(){
+    overviewYear++; renderOverview();
+  });
+
+  var todayStr = todayISO();
+  document.getElementById("customRangeFrom").value = todayStr;
+  document.getElementById("customRangeTo").value = todayStr;
+  document.getElementById("customRangeFrom").addEventListener("change", renderOverview);
+  document.getElementById("customRangeTo").addEventListener("change", renderOverview);
+
+  // Comparison chart month-range defaults to the last 6 months (inclusive of current month)
+  (function initChartRangeDefaults(){
+    var now = new Date();
+    var toVal = now.getFullYear() + "-" + String(now.getMonth()+1).padStart(2,"0");
+    var fromDate = new Date(now.getFullYear(), now.getMonth()-5, 1);
+    var fromVal = fromDate.getFullYear() + "-" + String(fromDate.getMonth()+1).padStart(2,"0");
+    document.getElementById("chartFromMonth").value = fromVal;
+    document.getElementById("chartToMonth").value = toVal;
+  })();
+  document.getElementById("chartFromMonth").addEventListener("change", renderComparisonChart);
+  document.getElementById("chartToMonth").addEventListener("change", renderComparisonChart);
+
+  function monthKey(d){
+    return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0");
+  }
+
+  // Returns the {from, to} ISO date strings for whatever range mode is active
+  function getActiveRange(){
+    if(overviewRangeMode === "month"){
+      var y = overviewMonth.getFullYear(), m = overviewMonth.getMonth();
+      var from = y + "-" + String(m+1).padStart(2,"0") + "-01";
+      var lastDay = new Date(y, m+1, 0).getDate();
+      var to = y + "-" + String(m+1).padStart(2,"0") + "-" + String(lastDay).padStart(2,"0");
+      return { from:from, to:to };
+    }
+    if(overviewRangeMode === "year"){
+      return { from: overviewYear + "-01-01", to: overviewYear + "-12-31" };
+    }
+    // custom
+    var f = document.getElementById("customRangeFrom").value || "0000-01-01";
+    var t = document.getElementById("customRangeTo").value || "9999-12-31";
+    return { from:f, to:t };
+  }
+
+  // A diary trip "overlaps" a range if any of its days fall inside [from,to]
+  function diaryOverlapsRange(e, range){
+    var eFrom = e.dateFrom, eTo = e.dateTo || e.dateFrom;
+    return eTo >= range.from && eFrom <= range.to;
+  }
+  function dateInRange(dateStr, range){
+    return dateStr >= range.from && dateStr <= range.to;
+  }
+
+  // Count of overlapping days a trip contributes within the range (for destination day-count and km/collection apportioning isn't needed — we just count full trip once per destination per the day-overlap count)
+  function overlapDaysInRange(e, range){
+    var from = new Date(Math.max(new Date(e.dateFrom), new Date(range.from)));
+    var to = new Date(Math.min(new Date(e.dateTo||e.dateFrom), new Date(range.to)));
+    var days = Math.round((to - from) / 86400000) + 1;
+    return days > 0 ? days : 0;
+  }
+
+  // Donut chart showing Collection, Fuel, Parts, and Other expenses as proportional
+  // segments, each with a leader line + arrow pointing to a label with its amount.
+  // Donut chart where Collection is the full circle (100%). Fuel, Parts, Others,
+  // and the remaining Net are each shown as a portion of that collection amount,
+  // with percentages calculated against total collection. Each segment has a
+  // leader line + arrowhead pointing to a label with its amount and percentage.
+  function renderBreakdownPie(collection, fuel, parts, others){
+    var wrap = document.getElementById("breakdownPieWrap");
+    var legend = document.getElementById("breakdownLegend");
+
+    if(collection <= 0){
+      wrap.innerHTML = '<p class="chart-empty">No collection logged for this period yet.</p>';
+      legend.innerHTML = "";
+      return;
+    }
+
+    var net = collection - (fuel + parts + others);
+    // Segments must always sum to exactly the collection amount (100% of the circle).
+    // If expenses exceed collection (a loss), net is shown as 0 width on the wheel
+    // itself (can't draw a negative slice) but its real value/percentage still
+    // displays correctly in the label and legend.
+    // Order: Others (usually smallest) is placed FIRST at the 12-o'clock position
+    // so its small slice and label dot sit cleanly at the top without crowding
+    // neighbors, before the larger Fuel/Parts/Net slices fan out clockwise.
+    var C_FUEL    = "#D1685A"; // rust red
+    var C_PARTS   = "#E8A020"; // golden amber/yellow
+    var C_OTHERS  = "#8B7FC7"; // purple/violet
+    var C_NET     = "#4C9A6A"; // green
+    var segments = [
+      { label:"Others", value:others, color:C_OTHERS },
+      { label:"Fuel",   value:fuel,   color:C_FUEL   },
+      { label:"Parts",  value:parts,  color:C_PARTS  },
+      { label:"Net",    value:Math.max(net,0), color:C_NET, actualValue:net }
+    ];
+
+    var W = 560, H = 400;
+    var cx = W/2, cy = H/2 - 6;
+    var rOuter = 90, rInner = 52;
+
+    function polarToXY(cx, cy, r, angleDeg){
+      var rad = (angleDeg - 90) * Math.PI / 180;
+      return { x: cx + r*Math.cos(rad), y: cy + r*Math.sin(rad) };
+    }
+
+    var svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" width="100%" height="' + H + '" xmlns="http://www.w3.org/2000/svg" style="max-width:' + W + 'px; display:block; margin:0 auto; overflow:visible;">';
+
+    var startAngle = 0;
+    var labelJobs = [];
+    segments.forEach(function(seg){
+      if(seg.value <= 0) return;
+      var sweep = (seg.value/collection) * 360;
+      var endAngle = startAngle + sweep;
+      var midAngle = startAngle + sweep/2;
+
+      var p1 = polarToXY(cx, cy, rOuter, startAngle);
+      var p2 = polarToXY(cx, cy, rOuter, endAngle);
+      var p3 = polarToXY(cx, cy, rInner, endAngle);
+      var p4 = polarToXY(cx, cy, rInner, startAngle);
+      var largeArc = sweep > 180 ? 1 : 0;
+
+      var pathD = "M " + p1.x + " " + p1.y +
+        " A " + rOuter + " " + rOuter + " 0 " + largeArc + " 1 " + p2.x + " " + p2.y +
+        " L " + p3.x + " " + p3.y +
+        " A " + rInner + " " + rInner + " 0 " + largeArc + " 0 " + p4.x + " " + p4.y +
+        " Z";
+
+      svg += '<path d="' + pathD + '" fill="' + seg.color + '" stroke="var(--paper)" stroke-width="2"/>';
+
+      var actualVal = seg.actualValue !== undefined ? seg.actualValue : seg.value;
+      var pct = Math.round((actualVal/collection)*100);
+      labelJobs.push({ seg:seg, midAngle:midAngle, pct:pct, actualVal:actualVal, sweep:sweep });
+
+      startAngle = endAngle;
+    });
+
+    // Small slices (under ~6% of the circle) get their label arrow flipped to the
+    // opposite side from where the slice physically sits, so a thin "Others" wedge
+    // doesn't crowd its neighboring label — the arrow still visually points back
+    // toward its own slice, it just lands on the far side of the chart to breathe.
+    var SMALL_SLICE_THRESHOLD = 6;
+    // Keep every label comfortably inside the canvas: the line bends out from the
+    // ring, then runs horizontally to a fixed-distance point near the left/right
+    // edge (not the true edge), leaving enough room for text + arrowhead.
+    var LABEL_INSET = 14;
+    var EDGE_X_RIGHT = W - LABEL_INSET;
+    var EDGE_X_LEFT = LABEL_INSET;
+    var MIN_LABEL_GAP = 36;
+    var LINE_GAP = 12; // gap between ring surface and line start dot — keeps dot outside the arc
+
+    var prepared = labelJobs.map(function(job){
+      var seg = job.seg, midAngle = job.midAngle, pct = job.pct, actualVal = job.actualVal, sweep = job.sweep;
+      // Start the leader line from just OUTSIDE the ring (rOuter + gap), not on the edge
+      var lineStart = polarToXY(cx, cy, rOuter + LINE_GAP, midAngle);
+      var isSmall = sweep < SMALL_SLICE_THRESHOLD;
+      var labelAngle = isSmall ? (midAngle + 180) : midAngle;
+      var lineBend = polarToXY(cx, cy, rOuter + LINE_GAP + 20, labelAngle);
+      var labelOnRight = Math.cos((labelAngle-90)*Math.PI/180) >= 0;
+      var lineEndX = labelOnRight ? (EDGE_X_RIGHT - 56) : (EDGE_X_LEFT + 56);
+      return {
+        seg:seg, pct:pct, actualVal:actualVal,
+        lineStart:lineStart, lineBend:lineBend,
+        midAngle:midAngle,
+        labelOnRight:labelOnRight, lineEndX:lineEndX, y:lineBend.y
+      };
+    });
+
+    // Declutter: push apart any two labels on the same side that are too close vertically
+    ["left","right"].forEach(function(side){
+      var group = prepared.filter(function(p){ return (side === "right") === p.labelOnRight; })
+        .sort(function(a,b){ return a.y - b.y; });
+      for(var i=1; i<group.length; i++){
+        var minY = group[i-1].y + MIN_LABEL_GAP;
+        if(group[i].y < minY) group[i].y = minY;
+      }
+    });
+
+    prepared.forEach(function(p){
+      var lineEnd = { x: p.lineEndX, y: p.y };
+      var arrowDir = p.labelOnRight ? 1 : -1;
+
+      // Small dot at the ring surface (where the line originates from the segment)
+      svg += '<circle cx="' + p.lineStart.x + '" cy="' + p.lineStart.y + '" r="2.5" fill="var(--ink-soft)"/>';
+
+      // Leader line: dot → bend → horizontal run
+      svg += '<polyline points="' + p.lineStart.x + ',' + p.lineStart.y + ' ' + p.lineBend.x + ',' + p.lineBend.y + ' ' + lineEnd.x + ',' + lineEnd.y +
+        '" fill="none" stroke="var(--ink-soft)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>';
+
+      // Arrowhead at the label end (pointing toward where the label text sits)
+      var ax = lineEnd.x, ay = lineEnd.y;
+      svg += '<polygon points="' + ax + ',' + (ay-4) + ' ' + (ax + arrowDir*8) + ',' + ay + ' ' + ax + ',' + (ay+4) +
+        '" fill="var(--ink-soft)"/>';
+
+      var labelX = lineEnd.x + (p.labelOnRight ? 12 : -12);
+      var anchor = p.labelOnRight ? "start" : "end";
+      svg +=
+        '<text x="' + labelX + '" y="' + (ay - 3) + '" font-size="11" font-weight="700" fill="var(--ink)" text-anchor="' + anchor + '" font-family="Space Grotesk, sans-serif">' + p.seg.label + '</text>' +
+        '<text x="' + labelX + '" y="' + (ay + 11) + '" font-size="10.5" fill="var(--ink-soft)" text-anchor="' + anchor + '" font-family="JetBrains Mono, monospace">' + fmtMoney(p.actualVal) + ' (' + p.pct + '%)</text>';
+    });
+
+    // Center label: total collection (the whole circle = 100%)
+    svg += '<text x="' + cx + '" y="' + (cy-13) + '" font-size="10" fill="var(--ink-soft)" text-anchor="middle" font-family="Space Grotesk, sans-serif">Total Collection</text>';
+    svg += '<text x="' + cx + '" y="' + (cy+9) + '" font-size="16" font-weight="700" fill="var(--ink)" text-anchor="middle" font-family="JetBrains Mono, monospace">' + fmtMoney(collection) + '</text>';
+    svg += '<text x="' + cx + '" y="' + (cy+25) + '" font-size="9" fill="var(--ink-soft)" text-anchor="middle" font-family="Space Grotesk, sans-serif">(100%)</text>';
+
+    svg += '</svg>';
+    wrap.innerHTML = svg;
+
+    var legendItems = [
+      { label:"Fuel",   value:fuel,   color:C_FUEL },
+      { label:"Parts",  value:parts,  color:C_PARTS },
+      { label:"Others", value:others, color:C_OTHERS },
+      { label:"Net",    value:net,    color: net>=0 ? C_NET : C_FUEL }
+    ];
+    legend.innerHTML = legendItems.map(function(seg){
+      var pct = Math.round((seg.value/collection)*100);
+      return '<span><span class="dot" style="background:' + seg.color + '"></span>' + seg.label + ' — ' + fmtMoney(seg.value) + ' (' + pct + '%)</span>';
+    }).join("");
+  }
+
+  function monthsBetween(fromMonthStr, toMonthStr){
+    // fromMonthStr/toMonthStr are "YYYY-MM"; returns array of {key, label, year, month}
+    var result = [];
+    if(!fromMonthStr || !toMonthStr) return result;
+    var fp = fromMonthStr.split("-"), tp = toMonthStr.split("-");
+    var cy = parseInt(fp[0],10), cm = parseInt(fp[1],10)-1;
+    var ey = parseInt(tp[0],10), em = parseInt(tp[1],10)-1;
+    var monthAbbr = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    var guard = 0;
+    while((cy < ey || (cy === ey && cm <= em)) && guard < 240){
+      result.push({
+        key: cy + "-" + String(cm+1).padStart(2,"0"),
+        label: monthAbbr[cm] + " '" + String(cy).slice(2),
+        year: cy, month: cm
+      });
+      cm++; if(cm > 11){ cm = 0; cy++; }
+      guard++;
+    }
+    return result;
+  }
+
+  function renderComparisonChart(){
+    var fromMonth = document.getElementById("chartFromMonth").value;
+    var toMonth = document.getElementById("chartToMonth").value;
+    var wrap = document.getElementById("comparisonChartWrap");
+    var legend = document.getElementById("comparisonChartLegend");
+
+    var months = monthsBetween(fromMonth, toMonth);
+    if(!months.length){
+      wrap.innerHTML = '<p class="chart-empty">Pick a from/to month above.</p>';
+      legend.innerHTML = "";
+      return;
+    }
+
+    var rows = months.map(function(m){
+      var collection = data.diary.filter(function(e){
+        return diaryOverlapsRange(e, { from:m.key+"-01", to:m.key+"-31" });
+      }).reduce(function(s,e){ return s + (e.collection||0); }, 0);
+      var fuel = data.fuel.filter(function(e){ return e.date && e.date.slice(0,7) === m.key && fuelEntryCategory(e) === "fuel"; })
+        .reduce(function(s,e){ return s + (e.amount||0); }, 0);
+      return { label:m.label, collection:collection, fuel:fuel };
+    });
+    rows.reverse(); // most recent month first (left to right)
+
+    var maxVal = Math.max.apply(null, rows.map(function(r){ return Math.max(r.collection, r.fuel); }).concat([1]));
+
+    var barW = 16, gap = 10, groupGap = 22, leftPad = 44, rightPad = 14, topPad = 28, bottomPad = 28;
+    var chartH = 156;
+    var groupW = barW*2 + gap;
+    var chartW = leftPad + rightPad + rows.length * (groupW + groupGap);
+
+    var svg = '<svg viewBox="0 0 ' + chartW + ' ' + (chartH+topPad+bottomPad) + '" width="' + chartW + '" height="' + (chartH+topPad+bottomPad) + '" xmlns="http://www.w3.org/2000/svg">';
+
+    // gridlines + y labels (0, 25%, 50%, 75%, 100% of maxVal)
+    for(var g=0; g<=4; g++){
+      var gy = topPad + chartH - (chartH * g/4);
+      var gv = Math.round(maxVal * g/4);
+      svg += '<line x1="' + leftPad + '" y1="' + gy + '" x2="' + (chartW-rightPad) + '" y2="' + gy + '" stroke="var(--line)" stroke-width="1"/>';
+      svg += '<text x="' + (leftPad-8) + '" y="' + (gy+3) + '" font-size="9" fill="var(--ink-soft)" text-anchor="end" font-family="JetBrains Mono, monospace">' + (gv>=1000? Math.round(gv/1000)+'k' : gv) + '</text>';
+    }
+
+    rows.forEach(function(r, idx){
+      var gx = leftPad + idx * (groupW + groupGap);
+      var collH = maxVal ? (r.collection/maxVal)*chartH : 0;
+      var fuelH = maxVal ? (r.fuel/maxVal)*chartH : 0;
+      var collY = topPad + chartH - collH;
+      var fuelY = topPad + chartH - fuelH;
+      svg += '<rect class="chart-bar" data-label="' + r.label + '" data-kind="Collection" data-value="' + Math.round(r.collection) +
+        '" x="' + gx + '" y="' + collY + '" width="' + barW + '" height="' + Math.max(collH,1) + '" rx="2" fill="var(--green)" style="cursor:pointer;"/>';
+      svg += '<rect class="chart-bar" data-label="' + r.label + '" data-kind="Fuel expense" data-value="' + Math.round(r.fuel) +
+        '" x="' + (gx+barW+gap) + '" y="' + fuelY + '" width="' + barW + '" height="' + Math.max(fuelH,1) + '" rx="2" fill="var(--rust)" style="cursor:pointer;"/>';
+      svg += '<text x="' + (gx+groupW/2) + '" y="' + (topPad+chartH+16) + '" font-size="10" fill="var(--ink-soft)" text-anchor="middle">' + r.label + '</text>';
+    });
+
+    svg += '</svg>';
+    wrap.innerHTML = svg;
+
+    legend.innerHTML =
+      '<span><span class="dot" style="background:var(--green)"></span>Collection</span>' +
+      '<span><span class="dot" style="background:var(--rust)"></span>Fuel expense</span>';
+
+    // ---- Interactive tooltip on hover/click/tap for each bar ----
+    var tooltip = document.getElementById("chartTooltip");
+    if(!tooltip){
+      tooltip = document.createElement("div");
+      tooltip.id = "chartTooltip";
+      tooltip.className = "chart-tooltip";
+      document.body.appendChild(tooltip);
+    }
+    function showTooltip(barEl){
+      var label = barEl.getAttribute("data-label");
+      var kind = barEl.getAttribute("data-kind");
+      var value = barEl.getAttribute("data-value");
+      tooltip.textContent = label + " — " + kind + ": " + fmtMoney(value);
+      var rect = barEl.getBoundingClientRect();
+      tooltip.style.left = (rect.left + rect.width/2) + "px";
+      tooltip.style.top = (rect.top - 10 + window.scrollY) + "px";
+      tooltip.classList.add("show");
+    }
+    function hideTooltip(){ tooltip.classList.remove("show"); }
+
+    wrap.querySelectorAll(".chart-bar").forEach(function(bar){
+      bar.addEventListener("mouseenter", function(){ showTooltip(bar); });
+      bar.addEventListener("mouseleave", hideTooltip);
+      bar.addEventListener("click", function(e){
+        e.stopPropagation();
+        showTooltip(bar);
+      });
+    });
+    // Tapping elsewhere dismisses the tooltip (helps on touch devices)
+    document.addEventListener("click", function(e){
+      if(!e.target.classList || !e.target.classList.contains("chart-bar")) hideTooltip();
+    });
+  }
+
+  /* ====================================================================
+     REPORT GENERATION — opens a clean print window, user saves as PDF
+     ==================================================================== */
+  function rangeLabelForReport(){
+    if(overviewRangeMode === "month"){
+      var monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+      return monthNames[overviewMonth.getMonth()] + " " + overviewMonth.getFullYear();
+    }
+    if(overviewRangeMode === "year") return "Year " + overviewYear;
+    var r = getActiveRange();
+    return fmtDateShort(r.from) + " to " + fmtDateShort(r.to);
+  }
+
+  function generatePdfReport(){
+    var range = getActiveRange();
+    var diaryInRange = data.diary.filter(function(e){ return diaryOverlapsRange(e, range); })
+      .sort(function(a,b){ return a.dateFrom.localeCompare(b.dateFrom); });
+    var fuelInRange = data.fuel.filter(function(e){ return dateInRange(e.date, range); })
+      .sort(function(a,b){ return a.date.localeCompare(b.date); });
+    var partsInRange = data.parts.filter(function(e){ return dateInRange(e.date, range); })
+      .sort(function(a,b){ return a.date.localeCompare(b.date); });
+
+    var totalCollection = diaryInRange.reduce(function(s,e){ return s+(e.collection||0); },0);
+    var totalKm = diaryInRange.reduce(function(s,e){ return s+(e.kmRun>0?e.kmRun:0); },0);
+    var totalFuel = fuelInRange.filter(function(e){ return fuelEntryCategory(e)==="fuel"; }).reduce(function(s,e){ return s+(e.amount||0); },0);
+    var totalOthers = fuelInRange.filter(function(e){ return fuelEntryCategory(e)==="others"; }).reduce(function(s,e){ return s+(e.amount||0); },0);
+    var totalParts = partsInRange.reduce(function(s,e){ return s+partsEntryAmountTotal(e); },0);
+    var totalExpense = totalFuel + totalParts + totalOthers;
+    var net = totalCollection - totalExpense;
+
+    var destCounts = {};
+    diaryInRange.forEach(function(e){
+      var days = overlapDaysInRange(e, range);
+      var names = e.destinations&&e.destinations.length ? e.destinations : (e.destination?[e.destination]:[]);
+      names.forEach(function(n){ destCounts[n]=(destCounts[n]||0)+days; });
+    });
+
+    function m(n){ return "Rs "+Math.round(n||0).toLocaleString("en-IN"); }
+    function row(cells, bold){
+      return "<tr>" + cells.map(function(c,i){
+        return "<td style='" + (i===cells.length-1?"text-align:right;":"") + (bold?"font-weight:700;":"") + "'>" + (c||"—") + "</td>";
+      }).join("") + "</tr>";
+    }
+    function section(title){ return "<h3 style='margin:24px 0 8px;font-size:13px;color:#2F8F7A;border-bottom:1.5px solid #E1E7ED;padding-bottom:6px;'>" + title + "</h3>"; }
+
+    var diaryRows = diaryInRange.map(function(e){
+      var dateLbl = e.dateFrom===e.dateTo ? fmtDateShort(e.dateFrom) : fmtDateShort(e.dateFrom)+" — "+fmtDateShort(e.dateTo);
+      return row([dateLbl, destLabel(e)||"—", fmtKm(e.kmRun)+" km", m(e.collection)]);
+    }).join("");
+
+    var fuelRows = fuelInRange.map(function(e){
+      var cat = fuelEntryCategory(e)==="fuel"?"Fuel":"Other";
+      return row([fmtDateShort(e.date), cat, fuelEntryLabel(e), m(e.amount)]);
+    }).join("");
+
+    var partRows = partsInRange.map(function(e){
+      var names = (e.items||[]).map(function(it){ return it.name+(it.amount?" ("+m(it.amount)+")":""); }).join(", ");
+      return row([fmtDateShort(e.date), fmtKm(e.km)+" km", names, m(partsEntryAmountTotal(e))]);
+    }).join("");
+
+    var destRows = OVERVIEW_DESTINATIONS.filter(function(n){ return destCounts[n]; }).map(function(n){
+      return row([n, destCounts[n]+" day"+(destCounts[n]>1?"s":""), "", Math.round(destCounts[n]/Math.max(1,diaryInRange.length)*100)+"%"]);
+    }).join("");
+
+    var tableStyle = "width:100%;border-collapse:collapse;font-size:11px;margin-bottom:8px;";
+    var thStyle = "background:#F4F7FA;padding:6px 8px;text-align:left;font-size:10px;color:#6B7A8F;font-weight:600;";
+    var tdStyle = "padding:5px 8px;border-bottom:1px solid #E1E7ED;vertical-align:top;";
+
+    var html = "<!DOCTYPE html><html><head><meta charset='UTF-8'><title>Riya Tours Report</title>" +
+      "<style>*{box-sizing:border-box;}body{font-family:'Helvetica Neue',Arial,sans-serif;color:#2E4057;padding:28px;max-width:900px;margin:0 auto;font-size:12px;}" +
+      "@media print{body{padding:16px;} .no-print{display:none;} h2{page-break-before:auto;}}" +
+      "table{" + tableStyle + "} th{" + thStyle + "} td{" + tdStyle + "}" +
+      ".stat-row{display:flex;gap:16px;flex-wrap:wrap;margin:12px 0;}" +
+      ".stat{flex:1;min-width:120px;background:#F4F7FA;border-radius:8px;padding:10px 14px;}" +
+      ".stat .lbl{font-size:10px;color:#6B7A8F;text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px;}" +
+      ".stat .val{font-size:16px;font-weight:700;}" +
+      ".income{color:#4C9A6A;} .expense{color:#D1685A;} .net{color:" + (net>=0?"#4C9A6A":"#D1685A") + ";}" +
+      "</style></head><body>" +
+      "<div style='text-align:center;border-bottom:2px solid #2F8F7A;padding-bottom:14px;margin-bottom:18px;'>" +
+        "<h1 style='margin:0;font-size:18px;color:#23705F;letter-spacing:.02em;'>RIYA TOURS AND TRAVELS</h1>" +
+        "<p style='margin:4px 0 0;font-size:11px;color:#6B7A8F;'>Report Period: <strong>" + rangeLabelForReport() + "</strong> &nbsp;|&nbsp; Vehicle: <strong>" + (data.vehicleNumber||"—") + "</strong> &nbsp;|&nbsp; Generated: " + todayISO() + " " + nowISTTimeString() + "</p>" +
+      "</div>" +
+      "<button class='no-print' onclick='window.print()' style='background:#2F8F7A;color:#fff;border:none;padding:9px 20px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:16px;'>⬇ Save as PDF (use Print → Save as PDF)</button>" +
+
+      section("Summary") +
+      "<div class='stat-row'>" +
+        "<div class='stat'><div class='lbl'>Total Collection</div><div class='val income'>" + m(totalCollection) + "</div></div>" +
+        "<div class='stat'><div class='lbl'>Total Expense</div><div class='val expense'>" + m(totalExpense) + "</div></div>" +
+        "<div class='stat'><div class='lbl'>Net Profit</div><div class='val net'>" + m(net) + "</div></div>" +
+        "<div class='stat'><div class='lbl'>Total Km Run</div><div class='val'>" + fmtKm(totalKm) + " km</div></div>" +
+      "</div>" +
+      "<div class='stat-row'>" +
+        "<div class='stat'><div class='lbl'>Fuel Expense</div><div class='val expense'>" + m(totalFuel) + "</div></div>" +
+        "<div class='stat'><div class='lbl'>Parts Expense</div><div class='val expense'>" + m(totalParts) + "</div></div>" +
+        "<div class='stat'><div class='lbl'>Other Expense</div><div class='val expense'>" + m(totalOthers) + "</div></div>" +
+        "<div class='stat'><div class='lbl'>Trips logged</div><div class='val'>" + diaryInRange.length + "</div></div>" +
+      "</div>" +
+
+      section("Days visited — by destination") +
+      (destRows ? "<table><thead><tr><th>Destination</th><th>Days</th><th></th><th style='text-align:right;'>% of trips</th></tr></thead><tbody>" + destRows + "</tbody></table>" : "<p style='color:#6B7A8F;font-size:11px;'>No trips for this period.</p>") +
+
+      section("Trips &amp; Income") +
+      (diaryRows ? "<table><thead><tr><th>Date</th><th>Destination</th><th>Km run</th><th style='text-align:right;'>Collection</th></tr></thead><tbody>" + diaryRows + "</tbody></table>" : "<p style='color:#6B7A8F;font-size:11px;'>No diary entries for this period.</p>") +
+
+      section("Expenses Log") +
+      (fuelRows ? "<table><thead><tr><th>Date</th><th>Category</th><th>Description</th><th style='text-align:right;'>Amount</th></tr></thead><tbody>" + fuelRows + "</tbody></table>" : "<p style='color:#6B7A8F;font-size:11px;'>No expenses for this period.</p>") +
+
+      section("Parts &amp; Maintenance") +
+      (partRows ? "<table><thead><tr><th>Date</th><th>Km at service</th><th>Parts changed</th><th style='text-align:right;'>Total</th></tr></thead><tbody>" + partRows + "</tbody></table>" : "<p style='color:#6B7A8F;font-size:11px;'>No part changes for this period.</p>") +
+
+      "</body></html>";
+
+    var w = window.open("", "_blank");
+    if(!w){ showToast("Allow pop-ups for this site to download the report"); return; }
+    w.document.write(html);
+    w.document.close();
+  }
+
+  document.getElementById("downloadReportBtn").addEventListener("click", generatePdfReport);
+
+  function renderOverview(){
+    var range = getActiveRange();
+    var monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+    document.getElementById("monthLabel").textContent = monthNames[overviewMonth.getMonth()] + " " + overviewMonth.getFullYear();
+    document.getElementById("yearLabel").textContent = String(overviewYear);
+
+    var diaryInRange = data.diary.filter(function(e){ return diaryOverlapsRange(e, range); });
+    var fuelInRange = data.fuel.filter(function(e){ return dateInRange(e.date, range); });
+    var partsInRange = data.parts.filter(function(e){ return dateInRange(e.date, range); });
+
+    var totalCollection = diaryInRange.reduce(function(s,e){ return s + (e.collection||0); }, 0);
+    var totalKm = diaryInRange.reduce(function(s,e){ return s + (e.kmRun>0?e.kmRun:0); }, 0);
+    var totalFuel = fuelInRange.filter(function(e){ return fuelEntryCategory(e) === "fuel"; })
+      .reduce(function(s,e){ return s + (e.amount||0); }, 0);
+    var totalOthers = fuelInRange.filter(function(e){ return fuelEntryCategory(e) === "others"; })
+      .reduce(function(s,e){ return s + (e.amount||0); }, 0);
+    var totalParts = partsInRange.reduce(function(s,e){ return s + partsEntryAmountTotal(e); }, 0);
+    var totalExpense = totalFuel + totalParts + totalOthers;
+    var net = totalCollection - totalExpense;
+
+    document.getElementById("statCollection").textContent = fmtMoney(totalCollection);
+    document.getElementById("statExpense").textContent = fmtMoney(totalExpense);
+    document.getElementById("statNet").textContent = fmtMoney(net);
+    document.getElementById("statNet").style.color = net >= 0 ? "var(--green)" : "var(--rust)";
+    document.getElementById("statKm").textContent = fmtKm(totalKm);
+    document.getElementById("statFuelTotal").textContent = fmtMoney(totalFuel);
+    document.getElementById("statPartsTotal").textContent = fmtMoney(totalParts);
+    document.getElementById("statOthersTotal").textContent = fmtMoney(totalOthers);
+
+    document.getElementById("avgCollection").value = diaryInRange.length ? fmtMoney(totalCollection/diaryInRange.length) : "—";
+    document.getElementById("avgKm").value = diaryInRange.length ? fmtKm(totalKm/diaryInRange.length) : "—";
+
+    renderBreakdownPie(totalCollection, totalFuel, totalParts, totalOthers);
+
+
+    // destination day-counts — only the restricted set is shown here (OVERVIEW_DESTINATIONS)
+    var destCounts = {};
+    diaryInRange.forEach(function(e){
+      var days = overlapDaysInRange(e, range);
+      var names = e.destinations && e.destinations.length ? e.destinations : (e.destination ? [e.destination] : []);
+      names.forEach(function(name){
+        destCounts[name] = (destCounts[name]||0) + days;
+      });
+    });
+    var destStatList = document.getElementById("destStatList");
+    destStatList.innerHTML = "";
+    var maxCount = Math.max.apply(null, OVERVIEW_DESTINATIONS.map(function(k){ return destCounts[k]||0; }).concat([1]));
+    var anyCounts = false;
+    OVERVIEW_DESTINATIONS.forEach(function(name){
+      var c = destCounts[name] || 0;
+      if(!c) return;
+      anyCounts = true;
+      var row = document.createElement("div");
+      row.className = "dest-stat-row";
+      row.innerHTML =
+        '<span class="dname">' + name + '</span>' +
+        '<span class="dbar-wrap"><span class="dbar" style="width:' + (c/maxCount*100) + '%"></span></span>' +
+        '<span class="dcount">' + c + ' day' + (c>1?'s':'') + '</span>';
+      destStatList.appendChild(row);
+    });
+    if(!anyCounts){
+      destStatList.innerHTML = '<p style="font-size:12px;color:var(--ink-soft);margin:0;">No trips logged for this period yet.</p>';
+    }
+
+    // Trips & income list
+    var list = document.getElementById("overviewDiaryList");
+  function switchToPage(pageName){
+    document.querySelectorAll(".tab").forEach(function(t){ t.classList.remove("active"); });
+    document.querySelectorAll(".page").forEach(function(p){ p.classList.remove("active"); });
+    var tab = document.querySelector(".tab[data-page='" + pageName + "']");
+    if(tab) tab.classList.add("active");
+    var page = document.getElementById("page-" + pageName);
+    if(page){ page.classList.add("active"); page.scrollIntoView({behavior:"smooth", block:"start"}); }
+  }
+
+    var sortedDiary = diaryInRange.slice().sort(function(a,b){ return (b.dateTo||b.dateFrom).localeCompare(a.dateTo||a.dateFrom); });
+    if(!sortedDiary.length){
+      list.innerHTML = '<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg><p>No diary entries for this period.</p></div>';
+    } else {
+      list.innerHTML = "";
+      sortedDiary.forEach(function(e){
+        var row = document.createElement("div");
+        row.className = "entry-row";
+        var days = tripDayCount(e);
+        row.innerHTML =
+          '<div class="date-chip">' + fmtDateRangeShort(e) + '</div>' +
+          '<div class="main">' +
+            '<p class="title">' + destLabel(e) + (days>1 ? ' · ' + days + ' days' : '') + '</p>' +
+            '<p class="sub">' + fmtKm(e.kmRun) + ' km</p>' +
+          '</div>' +
+          '<div class="amt income">' + fmtMoney(e.collection) + '</div>' +
+          '<div class="row-actions">' +
+            '<button class="ov-edit" title="Edit"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5Z"/></svg></button>' +
+            '<button class="ov-del" title="Delete"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2m2 0v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V6"/></svg></button>' +
+          '</div>';
+        row.querySelector(".ov-edit").addEventListener("click", function(){
+          switchToPage("diary"); startEditDiary(e.id);
+        });
+        row.querySelector(".ov-del").addEventListener("click", function(){
+          if(confirm("Delete this diary entry?")){ deleteDiaryEntry(e.id); renderOverview(); }
+        });
+        list.appendChild(row);
+      });
+    }
+
+    // Fuel list
+    var fuelListEl = document.getElementById("overviewFuelList");
+    var sortedFuel = fuelInRange.slice().sort(function(a,b){ return b.date.localeCompare(a.date); });
+    if(!sortedFuel.length){
+      fuelListEl.innerHTML = '<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 22h12M5 22V8l5-4 5 4v14"/></svg><p>No fuel entries for this period.</p></div>';
+    } else {
+      fuelListEl.innerHTML = "";
+      sortedFuel.forEach(function(e){
+        var row = document.createElement("div");
+        row.className = "entry-row";
+        var cat = fuelEntryCategory(e);
+        var label = fuelEntryLabel(e);
+        row.innerHTML =
+          '<div class="date-chip">' + fmtDateShort(e.date) + '</div>' +
+          '<div class="main"><p class="title">' + label + '</p>' +
+          '<p class="sub">' + (cat === "fuel" ? "Fuel expense" : "Other expense") + '</p></div>' +
+          '<div class="amt expense">' + fmtMoney(e.amount) + '</div>' +
+          '<div class="row-actions">' +
+            '<button class="ov-edit" title="Edit"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5Z"/></svg></button>' +
+            '<button class="ov-del" title="Delete"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2m2 0v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V6"/></svg></button>' +
+          '</div>';
+        row.querySelector(".ov-edit").addEventListener("click", function(){
+          switchToPage("fuel"); startEditFuel(e.id);
+        });
+        row.querySelector(".ov-del").addEventListener("click", function(){
+          if(confirm("Delete this expense entry?")){ deleteFuelEntry(e.id); renderOverview(); }
+        });
+        fuelListEl.appendChild(row);
+      });
+    }
+
+    // Parts list
+    var partListEl = document.getElementById("overviewPartList");
+    var sortedParts = partsInRange.slice().sort(function(a,b){ return b.date.localeCompare(a.date); });
+    if(!sortedParts.length){
+      partListEl.innerHTML = '<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/></svg><p>No part changes for this period.</p></div>';
+    } else {
+      partListEl.innerHTML = "";
+      sortedParts.forEach(function(e){
+        var row = document.createElement("div");
+        row.className = "entry-row";
+        row.innerHTML =
+          '<div class="date-chip">' + fmtDateShort(e.date) + '</div>' +
+          '<div class="main"><p class="title">' + partsEntryNamesLabel(e) + '</p><p class="sub">At ' + fmtKm(e.km) + ' km</p></div>' +
+          '<div class="amt expense">' + fmtMoney(partsEntryAmountTotal(e)) + '</div>' +
+          '<div class="row-actions">' +
+            '<button class="ov-edit" title="Edit"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5Z"/></svg></button>' +
+            '<button class="ov-del" title="Delete"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2m2 0v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V6"/></svg></button>' +
+          '</div>';
+        row.querySelector(".ov-edit").addEventListener("click", function(){
+          switchToPage("parts"); startEditPart(e.id);
+        });
+        row.querySelector(".ov-del").addEventListener("click", function(){
+          if(confirm("Delete this part entry?")){ deletePartEntry(e.id); renderOverview(); }
+        });
+        partListEl.appendChild(row);
+      });
+    }
+
+    renderComparisonChart();
+  }
+
+  renderOverview();
+
+  /* ====================================================================
+     ACCESS PASSWORD GATE — shown before the Google sign-in screen
+     ==================================================================== */
+  var PASSWORD_SESSION_KEY = "logbook_access_granted";
+
+  function showSigninGate(){
+    document.getElementById("passwordGate").style.display = "none";
+    document.getElementById("signinGate").style.display = "flex";
+    initSignIn();
+  }
+
+  function checkAccessPassword(){
+    var entered = document.getElementById("accessPasswordInput").value;
+    if(entered === ACCESS_PASSWORD){
+      sessionStorage.setItem(PASSWORD_SESSION_KEY, "1");
+      document.getElementById("accessPasswordError").style.display = "none";
+      showSigninGate();
+    } else {
+      document.getElementById("accessPasswordError").style.display = "block";
+      document.getElementById("accessPasswordInput").value = "";
+      document.getElementById("accessPasswordInput").focus();
+    }
+  }
+
+  document.getElementById("accessPasswordBtn").addEventListener("click", checkAccessPassword);
+  document.getElementById("accessPasswordInput").addEventListener("keydown", function(e){
+    if(e.key === "Enter") checkAccessPassword();
+  });
+
+  if(sessionStorage.getItem(PASSWORD_SESSION_KEY) === "1"){
+    // Already entered the password earlier this browser session
+    showSigninGate();
+  } else {
+    document.getElementById("passwordGate").style.display = "flex";
+  }
+
+})();
+</script>
+</body>
+</html>
